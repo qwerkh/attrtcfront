@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("auth", {
         email: localStorage.getItem('email') || null,
         token: localStorage.getItem('token') || null,
         refreshToken: localStorage.getItem('refreshToken') || null,
+        role:localStorage.getItem('role') || null,
     }),
     actions: {
         setTokens(access, refresh) {
@@ -24,6 +25,7 @@ export const useAuthStore = defineStore("auth", {
             this.userName = '';
             this.email = '';
             this.token = '';
+            this.role = '';
             this.refreshToken = '';
             router.push('/')
         },
@@ -33,12 +35,14 @@ export const useAuthStore = defineStore("auth", {
             this.email = user.email;
             this.userName = user.name;
             this.refreshToken = user.refreshToken;
+            this.role = user.role;
 
             localStorage.setItem('token', user.token);
             localStorage.setItem('userId', user.id);
             localStorage.setItem('user', user.name);
             localStorage.setItem('email', user.email);
             localStorage.setItem('refreshToken', user.refreshToken);
+            localStorage.setItem('role', user.role);
         },
         async refreshAccessToken() {
             try {

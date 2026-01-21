@@ -44,7 +44,6 @@ api.interceptors.response.use(
         }
 
         if ((error.response?.status === 401)) {
-            console.log("Jol-Re");
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({resolve, reject})
@@ -59,7 +58,6 @@ api.interceptors.response.use(
 
             try {
                 const newToken = await auth.refreshAccessToken()
-                console.log("new token", newToken);
                 processQueue(null, newToken);
                 originalRequest.headers.Authorization = `Bearer ${newToken}`
                 return api(originalRequest)

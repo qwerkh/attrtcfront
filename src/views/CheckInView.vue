@@ -9,12 +9,22 @@
           <h2>សូមចុចប៊ូតុងខាងក្រោមដើម្បីចុះវត្តមាន</h2>
         </v-col>
         <v-col cols="auto">
-          <v-btn :disabled="!!isScan" elevated size="x-large" @click="checkInAttendance" prepend-icon="mdi-fullscreen"
+          <v-btn :loading="isScan" v-if="isScan!=true" :disabled="!!isScan" elevated size="x-large"
+                 @click="checkInAttendance"
+                 prepend-icon="mdi-fullscreen"
                  color="indigo-darken-3">
             <template v-slot:prepend>
               <v-icon color="white"></v-icon>
             </template>
             Check Attendance
+          </v-btn>
+          <v-btn :loading="!isScan" v-if="isScan==true" elevated size="x-large" @click="refreshPage"
+                 prepend-icon="mdi-arrow-left"
+                 color="orange-darken-3">
+            <template v-slot:prepend>
+              <v-icon color="white"></v-icon>
+            </template>
+            Back
           </v-btn>
           <!--          <v-btn v-if="isScan" elevated size="x-large" @click="stopScan" prepend-icon="mdi-stop" color="red-darken-3">
                       <template v-slot:prepend>
@@ -34,13 +44,18 @@
             ចុះវត្តមានបានជោគជ័យ ! <br><br>
             ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}
           </h1>
-          <h1 style="color: red" v-if="scannedResult && code>250">
+          <h1 style="color: red" v-if="!message && scannedResult && code>250">
             មិនអាចចុះវត្តមានបានទេ<br><br>
             ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}
           </h1>
 
           <h1 v-if="message && code>250" style="color: red">{{ message }}<br><br>
             ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}</h1>
+
+          <v-skeleton-loader
+              v-if="loading"
+              type="card"
+          />
         </v-col>
       </v-row>
 
@@ -70,6 +85,7 @@ export default {
       qrScanner: null,
       scannedResult: "",
       scanning: false,
+      loading: false,
       message: '',
       error: '',
       stream: null,
@@ -95,12 +111,18 @@ export default {
     }
   },
   methods: {
+    refreshPage() {
+      this.isScan = false;
+      this.loading = false;
+      window.location.reload();
+    },
     startScan() {
       this.isScan = true;
       this.startScanner();
     },
     stopScan() {
       this.isScan = false;
+      this.loading = false;
       if (this.qrScanner) {
         this.qrScanner.stop();
       }
@@ -108,6 +130,7 @@ export default {
     async checkInAttendance() {
       let vm = this;
       vm.isScan = true;
+      vm.loading = true;
       if (!navigator.geolocation) {
         alert('Geolocation not supported');
         return;
@@ -130,12 +153,14 @@ export default {
               }
             })
             vm.scannedResult = useAuth.email;
+            vm.loading = false;
             vm.code = checkIn.data.code;
             if (checkIn.data && (checkIn.data.code === "401" || checkIn.data.code === "400" || checkIn.data.code === "402")) {
               vm.message = checkIn.data.message;
             }
           },
           () => {
+            vm.loading = false;
             alert('Please enable location access');
           },
           {
@@ -143,8 +168,6 @@ export default {
             timeout: 10000
           }
       );
-
-
     },
     startScanner() {
       let vm = this;

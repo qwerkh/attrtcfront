@@ -1,8 +1,77 @@
 <template>
+  <!--  <v-app>
+      &lt;!&ndash; Background container &ndash;&gt;
+      <div class="background">
+        <v-card class="form-card" elevation="10" width="360">
+          <v-card-title class="white&#45;&#45;text justify-center" style="font-weight: 700; font-size: 24px;">
+            Login
+          </v-card-title>
+          <v-card-text>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              &lt;!&ndash; Username &ndash;&gt;
+              <v-text-field
+                  v-model="username"
+                  label="Username"
+                  prepend-inner-icon="mdi-account"
+                  variant="outlined"
+                  rounded
+                  color="white"
+                  :rules="usernameRules"
+                  hide-details="auto"
+                  class="white-input"
+              ></v-text-field>
+
+              &lt;!&ndash; Password &ndash;&gt;
+              <v-text-field
+                  v-model="password"
+                  label="Password"
+                  prepend-inner-icon="mdi-lock"
+                  type="password"
+                  variant="outlined"
+                  rounded
+                  color="white"
+                  :rules="passwordRules"
+                  hide-details="auto"
+                  class="white-input"
+              ></v-text-field>
+
+              <div class="actions-row">
+                <v-checkbox
+                    v-model="remember"
+                    label="Remember me"
+                    class="white&#45;&#45;text"
+                    hide-details
+                    dense
+                    color="white"
+                ></v-checkbox>
+
+                <a href="#" class="forgot-link">Forgot password?</a>
+              </div>
+
+              <v-btn
+                  class="mt-4"
+                  color="white"
+                  rounded
+                  block
+                  :disabled="!valid"
+                  @click="submit"
+              >
+                Login
+              </v-btn>
+
+              <div class="register-text white&#45;&#45;text">
+                Don't have an account? <a href="#" class="register-link">Register</a>
+              </div>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </div>
+    </v-app>-->
+
   <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card>
+        <v-card class="form-card" elevation="10" :loading="loading">
           <!-- Title -->
           <v-card-text class="text-h6 text-center">
             Login
@@ -32,7 +101,9 @@
               />
             </v-form>
           </v-card-text>
-
+          <!--          <v-card-text class="text-center">
+                      <div ref="telegramBtn"></div>
+                    </v-card-text>-->
           <!-- Actions -->
           <v-card-actions class="justify-end">
             <v-btn
@@ -45,11 +116,12 @@
             >
               Login
             </v-btn>
-
-            <div ref="telegramBtn"></div>
+            <br>
 
           </v-card-actions>
-
+          <div class="register-text" style="margin-bottom: 20px">
+            Don't have an account? <a @click="gotoRegister" class="register-link">Register</a>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -82,13 +154,14 @@ export default {
       ]
     };
   },
-  mounted() {
+  /*mounted() {
+    window.onTelegramAuth = this.onTelegramAuth.bind(this);
     this.loadTelegramWidget();
-  },
+  },*/
   methods: {
-    loadTelegramWidget() {
+    /*loadTelegramWidget() {
       // Make callback global (Telegram requirement)
-      window.onTelegramAuth = this.onTelegramAuth;
+      window.onTelegramAuth = this.onTelegramAuth.bind(this);
 
       // Remove existing widget if remounted
       if (this.$refs.telegramBtn.firstChild) {
@@ -104,19 +177,21 @@ export default {
       script.setAttribute("data-userpic", "true");
       script.setAttribute("data-request-access", "write");
       script.setAttribute("data-onauth", "onTelegramAuth(user)");
-
+      console.log("Jol0");
       this.$refs.telegramBtn.appendChild(script);
     },
     async onTelegramAuth(user) {
       try {
+        console.log(user);
         const res = await fetch(process.env.VUE_APP_API_URL + "/auth/telegram", {
           method: "POST",
           headers: {
+            token: process.env.VUE_APP_API_SECRET,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(user),
         });
-
+        console.log(res);
         const data = await res.json();
 
         if (data.success) {
@@ -132,15 +207,16 @@ export default {
       } catch (err) {
         console.error("Auth error:", err);
       }
+    },*/
+    gotoRegister() {
+      this.$router.push('/register');
     },
     async login() {
       let vm = this;
       vm.loading = true;
       vm.error = null;
       try {
-        console.log((await vm.$refs.form.validate()).valid);
         if ((await vm.$refs.form.validate()).valid === true) {
-          console.log("Jol");
           const res = await axios({
             method: "post",
             url: process.env.VUE_APP_API_URL + "/auth/login",
@@ -152,7 +228,6 @@ export default {
               password: this.user.password,
             }
           })
-          console.log(res);
           if (res.status === 200) {
             let useAuth = useAuthStore();
             useAuth.login(res.data)
@@ -194,8 +269,87 @@ export default {
 ;
 </script>
 
+
 <style scoped>
 .fill-height {
   min-height: 100vh;
+}
+
+/*.background {
+  height: 100vh;
+  width: 100vw;
+  !* Use your uploaded background image path here *!
+  background: url('/path-to-your-uploaded-image.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}*/
+
+.form-card {
+  backdrop-filter: blur(12px);
+  background-color: rgba(255 255 255 / 0.15);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  width: 100%;
+  max-width: 520px;
+}
+
+.white-input .v-input__control {
+  color: white;
+}
+
+.white-input .v-label {
+  color: white !important;
+}
+
+.white-input input {
+  color: white !important;
+}
+
+.white-input .v-field__outline {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.white-input:hover .v-field__outline {
+  border-color: white !important;
+}
+
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.forgot-link {
+  color: white;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.register-text {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.register-link {
+  color: black !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }
 </style>
