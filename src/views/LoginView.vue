@@ -190,7 +190,7 @@ export default {
     },*/
     loadTelegramWidget() {
       // Make callback global (Telegram requirement)
-      window.onTelegramAuth = this.onTelegramAuth.bind(this);
+      // window.onTelegramAuth = this.onTelegramAuth.bind(this);
 
       // Remove existing widget if remounted
       if (this.$refs.telegramBtn.firstChild) {
@@ -205,14 +205,16 @@ export default {
       script.setAttribute("data-size", "large");
       script.setAttribute("data-userpic", "true");
       script.setAttribute("data-request-access", "write");
-      script.setAttribute("data-onauth", "onTelegramAuth");
+      window.onTelegramAuth = this.onTelegramAuth;
+      script.setAttribute('data-onauth', 'onTelegramAuth(user)');
       console.log("Jol0");
+      script.async = true;
       this.$refs.telegramBtn.appendChild(script);
     },
     async onTelegramAuth(user) {
       try {
         console.log(user);
-        const res = await fetch(process.env.VUE_APP_API_URL + "/auth/telegram", {
+        /*const res = await fetch(process.env.VUE_APP_API_URL + "/auth/telegram", {
           method: "POST",
           headers: {
             token: process.env.VUE_APP_API_SECRET,
@@ -232,7 +234,7 @@ export default {
           this.$emit("login-success", data.user);
         } else {
           console.error("Telegram login failed");
-        }
+        }*/
       } catch (err) {
         console.error("Auth error:", err);
       }
