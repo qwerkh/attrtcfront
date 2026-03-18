@@ -76,7 +76,7 @@
           <v-card-text class="text-h6 text-center">
             Login
           </v-card-text>
-          <div id="telegram-login"></div>
+<!--          <div id="telegram-login"></div>-->
           <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
@@ -103,9 +103,7 @@
               />
             </v-form>
           </v-card-text>
-          <!--          <v-card-text class="text-center">
-                      <div ref="telegramBtn"></div>
-                    </v-card-text>-->
+
           <!-- Actions -->
           <v-card-actions class="justify-end">
             <v-btn
@@ -118,7 +116,9 @@
             >
               Login
             </v-btn>
-
+            <v-card-text class="text-center">
+              <div ref="telegramBtn"></div>
+            </v-card-text>
             <br>
 
           </v-card-actions>
@@ -157,11 +157,11 @@ export default {
       ]
     };
   },
-  /*mounted() {
+  mounted() {
     window.onTelegramAuth = this.onTelegramAuth.bind(this);
     this.loadTelegramWidget();
-  },*/
-  mounted() {
+  },
+  /*mounted() {
     // 1️⃣ Define the global callback BEFORE loading the script
     window.onTelegramAuth = (user) => {
       console.log("Telegram auth object:", user);
@@ -184,13 +184,13 @@ export default {
     container.appendChild(script);
 
     console.log("Telegram widget script injected");
-  },
+  },*/
   methods: {
     /*onTelegramAuth(user) {
       console.log("Telegram user:", user);
 
     },*/
-    /*loadTelegramWidget() {
+    loadTelegramWidget() {
       // Make callback global (Telegram requirement)
       window.onTelegramAuth = this.onTelegramAuth.bind(this);
 
@@ -207,7 +207,7 @@ export default {
       script.setAttribute("data-size", "large");
       script.setAttribute("data-userpic", "true");
       script.setAttribute("data-request-access", "write");
-      script.setAttribute("data-onauth", "onTelegramAuth(user)");
+      script.setAttribute("data-onauth", "onTelegramAuth");
       console.log("Jol0");
       this.$refs.telegramBtn.appendChild(script);
     },
@@ -238,7 +238,7 @@ export default {
       } catch (err) {
         console.error("Auth error:", err);
       }
-    },*/
+    },
     gotoRegister() {
       this.$router.push('/register');
     },
