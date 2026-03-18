@@ -179,7 +179,7 @@ export default {
     script.setAttribute("data-size", "large");
     script.setAttribute("data-request-access", "write");
     script.setAttribute("data-userpic", "false");
-    script.setAttribute("data-on-auth", "onTelegramAuth(user)");
+    script.setAttribute("data-on-auth", "onTelegramAuth");
 
     document.getElementById("telegram-login").appendChild(script);
     console.log("Jol");
