@@ -14,7 +14,7 @@
           />
           <span v-if="!isMobile">Attendant List</span>
 
-          <v-spacer/>
+          <v-spacer v-if="!isMobile"/>
 
           <v-menu
               v-model="menu"
@@ -67,7 +67,7 @@
             ></v-date-picker>
           </v-menu>
 
-          <v-spacer/>
+          <v-spacer v-if="!isMobile"/>
 
           <!--          <add-button
                         v-if="checkRole('Create') && !isMobile"
@@ -92,6 +92,9 @@
             @update:options="onOptionsChange"
             hide-default-footer
         >
+          <template v-slot:[`item.index`]="{ index }">
+            {{ (currentPage - 1) * itemsPerPage + index + 1 }}
+          </template>
           <template #loading>
             <v-progress-circular indeterminate color="green"/>
           </template>
@@ -181,6 +184,7 @@ export default {
         dateend: moment().format("YYYY-MM-DD"),
       },
       headers: [
+        {title: '#', key: 'index', width: "220px"},
         {title: 'ឈ្មោះ', key: 'name'},
         {title: 'យឺតពេលព្រឹក (ចូល)-នាទី', key: 'MorningIn'},
         {title: 'ចេញមុនពេលព្រឹក (ចេញ)-នាទី', key: 'MorningOut'},

@@ -14,7 +14,7 @@
           />
           <span v-if="!isMobile">Emplyee</span>
 
-          <v-spacer/>
+          <v-spacer v-if="!isMobile"/>
 
           <v-text-field
               v-model="search"
@@ -24,7 +24,7 @@
               prepend-inner-icon="mdi-magnify"
           />
 
-          <v-spacer/>
+          <v-spacer v-if="!isMobile"/>
 
           <!--          <add-button
                         v-if="checkRole('Create') && !isMobile"
@@ -48,6 +48,10 @@
             v-model:items-per-page="itemsPerPage"
             @update:options="onOptionsChange"
         >
+          <template v-slot:[`item.index`]="{ index }">
+            {{ (currentPage - 1) * itemsPerPage + index + 1 }}
+          </template>
+
           <template #loading>
             <v-progress-circular indeterminate color="green"/>
           </template>
@@ -167,7 +171,9 @@ export default {
       pageCount: 0,
 
       headers: [
+        {title: '#', key: 'index', width: "220px"},
         {title: 'Name', key: 'name'},
+        {title: 'Latin Name', key: 'latinName'},
         {title: 'Email', key: 'email'},
         {title: 'Staus', key: 'status', width: "220px"},
         {title: 'Actions', key: 'action', sortable: false, width: "220px"}

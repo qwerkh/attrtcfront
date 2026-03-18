@@ -76,6 +76,9 @@
           <v-card-text class="text-h6 text-center">
             Login
           </v-card-text>
+          <div id="telegram-login"></div>
+
+          <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
 
@@ -116,6 +119,7 @@
             >
               Login
             </v-btn>
+
             <br>
 
           </v-card-actions>
@@ -158,7 +162,25 @@ export default {
     window.onTelegramAuth = this.onTelegramAuth.bind(this);
     this.loadTelegramWidget();
   },*/
+  mounted() {
+    window.onTelegramAuth = this.onTelegramAuth;
+
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-widget.js?22";
+    script.async = true;
+    script.setAttribute("data-telegram-login", "attrpitsbbot");
+    script.setAttribute("data-size", "large");
+    script.setAttribute("data-request-access", "write");
+    script.setAttribute("data-userpic", "false");
+    script.setAttribute("data-on-auth", "onTelegramAuth(user)");
+
+    document.getElementById("telegram-login").appendChild(script);
+  },
   methods: {
+    onTelegramAuth(user) {
+      console.log("Telegram user:", user);
+
+    },
     /*loadTelegramWidget() {
       // Make callback global (Telegram requirement)
       window.onTelegramAuth = this.onTelegramAuth.bind(this);

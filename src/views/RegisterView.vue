@@ -13,14 +13,22 @@
             <v-form ref="form" v-model="valid">
               <v-text-field
                   v-model="user.name"
-                  label="Name"
+                  label="ឈ្មោះខ្មែរ"
+                  prepend-inner-icon="mdi-account"
+                  :rules="[v => !!v && !!v.length]"
+                  required
+              />
+              <v-text-field
+                  v-model="user.latinName"
+                  label="ឈ្មោះឡាតាំង"
                   prepend-inner-icon="mdi-account"
                   required
+                  :rules="[v => !!v && !!v.length]"
               />
 
               <v-text-field
                   v-model="user.email"
-                  label="Email"
+                  label="អ៊ីម៉ែល"
                   prepend-inner-icon="mdi-email"
                   :rules="emailRules"
                   required
@@ -28,7 +36,7 @@
 
               <v-text-field
                   v-model="user.password"
-                  label="Password"
+                  label="លេខសំងាត់(យ៉ាងតិច6ខ្ទង់)"
                   prepend-inner-icon="mdi-lock"
                   :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="showPassword ? 'text' : 'password'"
@@ -72,6 +80,7 @@ export default {
       user: {
         email: "",
         password: "",
+        latinName: "",
         name: ""
       },
       loading: false,
@@ -106,12 +115,13 @@ export default {
             data: {
               email: this.user.email,
               password: this.user.password,
+              latinName: this.user.latinName,
               name: this.user.name,
             }
           })
           if (res.status === 200) {
             vm.$router.push('/')
-            alert("ចុះឈ្មោះបានជោគជ័យ")
+            alert("ចុះឈ្មោះបានជោគជ័យ, សូមរងចាំការ អនុញ្ញាតពី admin!")
           } else {
             alert(res.data.message)
           }

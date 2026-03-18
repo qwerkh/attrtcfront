@@ -94,6 +94,8 @@ export default {
       code: 200,
       currentDate: moment().format("DD/MM/YYYY"),
       currentTime: moment().format("HH:mm:ss"),
+      officeLatitude: "",
+      officeLongitude: "",
     }
   },
   // 13.104756962789539, 103.19984872675734
