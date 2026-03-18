@@ -206,7 +206,9 @@ export default {
       script.setAttribute("data-userpic", "true");
       script.setAttribute("data-request-access", "write");
       window.onTelegramAuth = this.onTelegramAuth;
-      script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+      // script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+      script.setAttribute('data-auth-url', 'https://attrtcfront.vercel.app/auth/telegram');
+    // Remove data-onauth completely
       console.log("Jol0");
       script.async = true;
       this.$refs.telegramBtn.appendChild(script);
