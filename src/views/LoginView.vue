@@ -165,6 +165,13 @@ export default {
   mounted() {
     window.onTelegramAuth = this.onTelegramAuth;
 
+    // 1️⃣ Define a global callback so Telegram widget can call it
+    window.onTelegramAuth = (user) => {
+      console.log("Telegram auth object:", user);
+      this.user = user; // store locally
+      // TODO: send 'user' to backend to verify hash
+    };
+
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.async = true;
