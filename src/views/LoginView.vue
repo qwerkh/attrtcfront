@@ -77,7 +77,13 @@
             Login
           </v-card-text>
           <div id="telegram-login"></div>
-
+          <script async src="https://telegram.org/js/telegram-widget.js?22"
+                  data-telegram-login="attrpitsbbot"
+                  data-size="large"
+                  data-request-access="write"
+                  data-userpic="false"
+                  data-on-auth="onTelegramAuth">
+          </script>
           <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
@@ -162,7 +168,7 @@ export default {
     window.onTelegramAuth = this.onTelegramAuth.bind(this);
     this.loadTelegramWidget();
   },*/
-  mounted() {
+  /*mounted() {
     window.onTelegramAuth = this.onTelegramAuth;
 
     // 1️⃣ Define a global callback so Telegram widget can call it
@@ -183,7 +189,7 @@ export default {
 
     document.getElementById("telegram-login").appendChild(script);
     console.log("Jol");
-  },
+  },*/
   methods: {
     onTelegramAuth(user) {
       console.log("Telegram user:", user);
