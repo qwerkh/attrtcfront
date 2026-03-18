@@ -77,13 +77,6 @@
             Login
           </v-card-text>
           <div id="telegram-login"></div>
-          <script async src="https://telegram.org/js/telegram-widget.js?22"
-                  data-telegram-login="attrpitsbbot"
-                  data-size="large"
-                  data-request-access="write"
-                  data-userpic="false"
-                  data-on-auth="onTelegramAuth">
-          </script>
           <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
@@ -168,33 +161,35 @@ export default {
     window.onTelegramAuth = this.onTelegramAuth.bind(this);
     this.loadTelegramWidget();
   },*/
-  /*mounted() {
-    window.onTelegramAuth = this.onTelegramAuth;
-
-    // 1️⃣ Define a global callback so Telegram widget can call it
+  mounted() {
+    // 1️⃣ Define the global callback BEFORE loading the script
     window.onTelegramAuth = (user) => {
       console.log("Telegram auth object:", user);
-      this.user = user; // store locally
+      this.user = user; // store user in Vue reactive data
       // TODO: send 'user' to backend to verify hash
     };
 
+    // 2️⃣ Dynamically inject the Telegram widget script
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.async = true;
-    script.setAttribute("data-telegram-login", "attrpitsbbot");
+    script.setAttribute("data-telegram-login", "attrpitsbbot"); // your bot username
     script.setAttribute("data-size", "large");
     script.setAttribute("data-request-access", "write");
     script.setAttribute("data-userpic", "false");
-    script.setAttribute("data-on-auth", "onTelegramAuth");
+    script.setAttribute("data-on-auth", "onTelegramAuth"); // just the function name
 
-    document.getElementById("telegram-login").appendChild(script);
-    console.log("Jol");
-  },*/
+    const container = document.getElementById("telegram-login");
+    container.innerHTML = ""; // clear old widget if any
+    container.appendChild(script);
+
+    console.log("Telegram widget script injected");
+  },
   methods: {
-    onTelegramAuth(user) {
+    /*onTelegramAuth(user) {
       console.log("Telegram user:", user);
 
-    },
+    },*/
     /*loadTelegramWidget() {
       // Make callback global (Telegram requirement)
       window.onTelegramAuth = this.onTelegramAuth.bind(this);
