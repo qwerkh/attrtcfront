@@ -163,28 +163,24 @@ export default {
     this.loadTelegramWidget();
   },*/
   mounted() {
-    // Define global callback
-    window.onTelegramAuth = (user) => {
-      console.log("Telegram auth object:", user);
-      // You can also call a Vue method if needed
-      this.handleTelegramAuth(user);
-    };
+    window.onTelegramAuth = this.onTelegramAuth;
 
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.async = true;
-    script.setAttribute("data-telegram-login", "rpitsbbot"); // your bot username
+    script.setAttribute("data-telegram-login", "attrpitsbbot");
     script.setAttribute("data-size", "large");
     script.setAttribute("data-request-access", "write");
     script.setAttribute("data-userpic", "false");
     script.setAttribute("data-on-auth", "onTelegramAuth(user)");
 
     document.getElementById("telegram-login").appendChild(script);
+    console.log("Jol");
   },
   methods: {
-    handleTelegramAuth(user) {
-      // This is your Vue-side handler
-      console.log("Received in Vue method:", user);
+    onTelegramAuth(user) {
+      console.log("Telegram user:", user);
+
     },
     /*loadTelegramWidget() {
       // Make callback global (Telegram requirement)
