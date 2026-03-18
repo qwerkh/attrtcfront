@@ -76,7 +76,7 @@
           <v-card-text class="text-h6 text-center">
             Login
           </v-card-text>
-<!--          <div id="telegram-login"></div>-->
+          <div id="telegram-login"  ref="telegramBtn"></div>
           <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
@@ -116,9 +116,6 @@
             >
               Login
             </v-btn>
-            <v-card-text class="text-center">
-              <div ref="telegramBtn"></div>
-            </v-card-text>
             <br>
 
           </v-card-actions>
@@ -158,7 +155,8 @@ export default {
     };
   },
   mounted() {
-    window.onTelegramAuth = this.onTelegramAuth.bind(this);
+    // window.onTelegramAuth = this.onTelegramAuth.bind(this);
+    window.onTelegramAuth = this.onTelegramAuth;
     this.loadTelegramWidget();
   },
   /*mounted() {
