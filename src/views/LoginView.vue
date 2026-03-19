@@ -76,7 +76,7 @@
           <v-card-text class="text-h6 text-center">
             Login
           </v-card-text>
-          <div id="telegram-login"  ref="telegramBtn"></div>
+<!--          <div id="telegram-login" ref="telegramBtn"></div>-->
           <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
@@ -131,6 +131,7 @@
 <script>
 import axios from 'axios'
 import {useAuthStore} from "@/store/auth.js"
+import {getDeviceId} from '@/lib/GlobalFn';
 
 export default {
   name: "LoginView",
@@ -156,8 +157,8 @@ export default {
   },
   mounted() {
     // window.onTelegramAuth = this.onTelegramAuth.bind(this);
-    window.onTelegramAuth = this.onTelegramAuth;
-    this.loadTelegramWidget();
+    /*window.onTelegramAuth = this.onTelegramAuth;
+    this.loadTelegramWidget();*/
   },
   /*mounted() {
     // 1️⃣ Define the global callback BEFORE loading the script
@@ -188,7 +189,7 @@ export default {
       console.log("Telegram user:", user);
 
     },*/
-    loadTelegramWidget() {
+    /*loadTelegramWidget() {
       // Make callback global (Telegram requirement)
       // window.onTelegramAuth = this.onTelegramAuth.bind(this);
 
@@ -208,7 +209,7 @@ export default {
       window.onTelegramAuth = this.onTelegramAuth;
       // script.setAttribute('data-onauth', 'onTelegramAuth(user)');
       script.setAttribute('data-auth-url', 'https://attrtcfront.vercel.app/auth/telegram');
-    // Remove data-onauth completely
+      // Remove data-onauth completely
       console.log("Jol0");
       script.async = true;
       this.$refs.telegramBtn.appendChild(script);
@@ -216,7 +217,7 @@ export default {
     async onTelegramAuth(user) {
       try {
         console.log(user);
-        /*const res = await fetch(process.env.VUE_APP_API_URL + "/auth/telegram", {
+        /!*const res = await fetch(process.env.VUE_APP_API_URL + "/auth/telegram", {
           method: "POST",
           headers: {
             token: process.env.VUE_APP_API_SECRET,
@@ -236,11 +237,11 @@ export default {
           this.$emit("login-success", data.user);
         } else {
           console.error("Telegram login failed");
-        }*/
+        }*!/
       } catch (err) {
         console.error("Auth error:", err);
       }
-    },
+    },*/
     gotoRegister() {
       this.$router.push('/register');
     },
@@ -248,6 +249,7 @@ export default {
       let vm = this;
       vm.loading = true;
       vm.error = null;
+      alert(getDeviceId());
       try {
         if ((await vm.$refs.form.validate()).valid === true) {
           const res = await axios({

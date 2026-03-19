@@ -17,6 +17,7 @@
     "moment-timezone": "^0.6.0",
     "pinia": "^3.0.4",
     "roboto-fontface": "*",
+    "uuid": "^13.0.0",
     "vue": "^3.2.13",
     "vue-i18n": "^9.1.0",
     "vue-router": "^4.0.3",
