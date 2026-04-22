@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import EmployeeView from '../views/EmpolyeeView.vue'
 import ChekInByDayView from '../views/CheckInByDay.vue'
+import {Constants} from "@/lib/constant";
 
 const routes = [
     {
@@ -62,7 +63,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(Constants.BASE_URL),
     routes
 })
 

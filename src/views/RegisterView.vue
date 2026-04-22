@@ -71,6 +71,7 @@
 
 <script>
 import axios from 'axios'
+import {Constants} from "@/lib/constant";
 
 export default {
   name: "LoginView",
@@ -108,9 +109,9 @@ export default {
         if ((await vm.$refs.form.validate()).valid === true) {
           const res = await axios({
             method: "post",
-            url: process.env.VUE_APP_API_URL + "/auth/register",
+            url: Constants.VUE_APP_API_URL + "/auth/register",
             headers: {
-              token: process.env.VUE_APP_API_SECRET
+              token: Constants.VUE_APP_API_SECRET
             },
             data: {
               email: this.user.email,

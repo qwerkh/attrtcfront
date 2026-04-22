@@ -156,6 +156,7 @@ import {useDisplay} from 'vuetify'
 import api from "@/util/axios";
 import {useAuthStore} from "@/store/auth";
 import moment from "moment";
+import {Constants} from "@/lib/constant";
 
 export default {
   name: 'EmployeeView',
@@ -243,7 +244,7 @@ export default {
       let useAuth = useAuthStore();
       const res = await api.request({
         method: "post",
-        url: process.env.VUE_APP_API_URL + "/scan/byDay",
+        url: Constants.VUE_APP_API_URL + "/scan/byDay",
         headers: {
           Authorization: `Bearer ${useAuth.token}`,
           // Authorization: `${vm.auth.token}`,

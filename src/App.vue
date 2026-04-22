@@ -104,6 +104,7 @@
 import {useAuthStore} from '@/store/auth.js'
 import {getDeviceId} from '@/lib/GlobalFn';
 import axios from "axios";
+import {Constants} from "@/lib/constant";
 
 export default {
   data() {
@@ -170,7 +171,7 @@ export default {
       console.log(device);
       const requestDevice = await axios({
         method: "post",
-        url: process.env.VUE_APP_API_URL + "/employee/requestDevice",
+        url: Constants.VUE_APP_API_URL + "/employee/requestDevice",
         headers: {
           token: `${useAuth.token}`,
         },

@@ -1,8 +1,9 @@
 import axios from 'axios'
 import {useAuthStore} from '@/store/auth'
+import {Constants} from "@/lib/constant";
 
 const api = axios.create({
-    baseURL: process.env.VUE_APP_API_URL
+    baseURL: Constants.VUE_APP_API_URL
 })
 
 api.interceptors.request.use(config => {

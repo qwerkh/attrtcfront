@@ -1,4 +1,5 @@
 import { createI18n } from 'vue-i18n'
+import {Constants} from "@/lib/constant";
 
 /**
  * Load locale messages
@@ -20,7 +21,7 @@ function loadLocaleMessages() {
 }
 
 export default createI18n({
-  locale: process.env.VUE_APP_I18N_LOCALE || 'en',
-  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+  locale: Constants.VUE_APP_I18N_LOCALE || 'en',
+  fallbackLocale: Constants.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
   messages: loadLocaleMessages()
 })

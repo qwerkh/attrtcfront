@@ -62,6 +62,7 @@
 import {useAuthStore} from "@/store/auth";
 import moment from 'moment';
 import axios from "axios";
+import {Constants} from "@/lib/constant";
 
 export default {
   name: 'CheckInView',
@@ -123,7 +124,7 @@ export default {
 
             const checkIn = await axios({
               method: "post",
-              url: process.env.VUE_APP_API_URL + "/employee/checkIn",
+              url: Constants.VUE_APP_API_URL + "/employee/checkIn",
               headers: {
                 token: `${useAuth.token}`,
               },
