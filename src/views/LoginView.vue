@@ -180,6 +180,7 @@ export default {
               password: this.user.password,
             }
           })
+          console.log(res.data);
           if (res.data.code === 200 || res.data.code === 201) {
             let useAuth = useAuthStore();
             useAuth.login(res.data.data)
