@@ -1,15 +1,16 @@
 import {defineStore} from "pinia"
-import axios from "axios";
+// import axios from "axios";
 import router from '@/router'
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
-        userId: localStorage.getItem('userId') || null,
-        userName: localStorage.getItem('user') || null,
-        email: localStorage.getItem('email') || null,
-        token: localStorage.getItem('token') || null,
-        refreshToken: localStorage.getItem('refreshToken') || null,
-        role:localStorage.getItem('role') || null,
+        userId: localStorage.getItem('userId') || "",
+        username: localStorage.getItem('username') || "",
+        name: localStorage.getItem('name') || "",
+        token: localStorage.getItem('token') || "",
+        refreshToken: localStorage.getItem('refreshToken') || "",
+        isAdmin: localStorage.getItem('isAdmin') || "",
+        device: localStorage.getItem('device') || "",
     }),
     actions: {
         setTokens(access, refresh) {
@@ -20,31 +21,33 @@ export const useAuthStore = defineStore("auth", {
         },
         logout() {
             this.$reset()
+            let device = localStorage.getItem('device') || "";
             localStorage.clear()
             this.userId = '';
-            this.userName = '';
-            this.email = '';
+            this.username = '';
+            this.name = '';
             this.token = '';
-            this.role = '';
+            this.isAdmin = '';
             this.refreshToken = '';
+            localStorage.setItem('device', device);
             router.push('/')
         },
         login(user) {
-            this.userId = user.id;
+            this.userId = user._id;
+            this.username = user.username;
+            this.name = user.profile.fullName;
             this.token = user.token;
-            this.email = user.email;
-            this.userName = user.name;
-            this.refreshToken = user.refreshToken;
-            this.role = user.role;
+            this.refreshToken = user.refreshToken || "";
+            this.isAdmin = user.isAdmin;
 
             localStorage.setItem('token', user.token);
-            localStorage.setItem('userId', user.id);
-            localStorage.setItem('user', user.name);
-            localStorage.setItem('email', user.email);
+            localStorage.setItem('userId', user._id);
+            localStorage.setItem('username', user.username);
+            localStorage.setItem('name', user.profile.fullName);
             localStorage.setItem('refreshToken', user.refreshToken);
-            localStorage.setItem('role', user.role);
+            localStorage.setItem('isAdmin', user.isAdmin);
         },
-        async refreshAccessToken() {
+        /*async refreshAccessToken() {
             try {
                 const res = await axios.post(
                     process.env.VUE_APP_API_URL + '/auth/refresh',
@@ -65,6 +68,6 @@ export const useAuthStore = defineStore("auth", {
                 return false;
             }
 
-        }
+        }*/
     }
 })

@@ -2,10 +2,10 @@
   <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card class="form-card" elevation="10">
+        <v-card  variant="flat">
           <!-- Title -->
           <v-card-text class="text-h6 text-center">
-            Register
+            បង្កើតគណនី
           </v-card-text>
 
           <!-- Form -->
@@ -61,7 +61,7 @@
 
           </v-card-actions>
           <div class="register-text" style="margin-bottom: 20px">
-            Already have an account? <a @click="gotoLogin" class="register-link">Login</a>
+            មានគណនីរួចរាល់? <a @click="gotoLogin" class="register-link">ចូលប្រើប្រាស់</a>
           </div>
         </v-card>
       </v-col>

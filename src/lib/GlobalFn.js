@@ -1,11 +1,10 @@
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 export function getDeviceId() {
-    let deviceId = localStorage.getItem('device_id');
-
+    let deviceId = localStorage.getItem('device');
     if (!deviceId) {
         deviceId = uuidv4();
-        localStorage.setItem('device_id', deviceId);
+        localStorage.setItem('device', deviceId);
     }
 
     return deviceId;

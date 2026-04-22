@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- App Bar -->
-    <v-app-bar app color="primary" dark v-if="!!userDoc.token">
+    <v-app-bar app color="#005BAA" dark v-if="!!userDoc.token">
       <v-app-bar-nav-icon v-if="!!userDoc.token" @click="toggleDrawer"></v-app-bar-nav-icon>
       <v-toolbar-title v-if="!!userDoc.token">Scan Attendance</v-toolbar-title>
 
@@ -9,6 +9,7 @@
       <v-spacer></v-spacer>
 
       <!-- Login / Logout Button -->
+      <v-btn v-if="!!userDoc.token" color="white" @click="connectToServer">ភ្ចាប់ជាមួយម៉ាស៊ីនមេ</v-btn>
       <v-btn v-if="!!userDoc.token" color="white" @click="logout">Logout</v-btn>
     </v-app-bar>
 
@@ -23,8 +24,8 @@
                   src="https://img.freepik.com/premium-vector/professional-male-avatar-profile-picture-employee-work_1322206-66590.jpg"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ userDoc.userName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ userDoc.email }}</v-list-item-subtitle>
+              <v-list-item-title>{{ userDoc.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ userDoc.username }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -67,8 +68,8 @@
 
     <!-- Footer -->
     <v-footer app padless v-if="!!userDoc.token">
-      <v-sheet color="primary" width="100%" class="text-center white--text py-2">
-        © 2025 RPITSB
+      <v-sheet color="#005BAA" width="100%" class="text-center white--text py-2">
+        © 2026 BBWSA AMS
       </v-sheet>
     </v-footer>
 
@@ -83,7 +84,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
 
           <v-btn variant="text" @click="cancel">
             Cancel
@@ -101,6 +102,8 @@
 
 <script>
 import {useAuthStore} from '@/store/auth.js'
+import {getDeviceId} from '@/lib/GlobalFn';
+import axios from "axios";
 
 export default {
   data() {
@@ -119,7 +122,7 @@ export default {
         resolve: null,
       },
       items: [
-        {
+        /*{
           title: 'Check In List',
           action: "mdi-home-city",
           to: "/checkInByDay",
@@ -129,12 +132,12 @@ export default {
           action: "mdi-account",
           to: "/employee",
           hasRole: () => useAuthStore().role == "Admin"
-        },
+        },*/
         {
           title: 'Scan Attendance',
           action: "mdi-fullscreen",
           to: "/scan",
-          hasRole: () => useAuthStore().role == "Teacher"
+          hasRole: () => true
         }
       ],
     };
@@ -160,6 +163,27 @@ export default {
     },
     toggleDrawer() {
       this.drawer = !this.drawer;
+    },
+    async connectToServer() {
+      let device = getDeviceId();
+      let useAuth = useAuthStore();
+      console.log(device);
+      const checkIn = await axios({
+        method: "post",
+        url: process.env.VUE_APP_API_URL + "/employee/checkIn",
+        headers: {
+          token: `${useAuth.token}`,
+        },
+        data: {
+          userId: useAuth.userId,
+          device: device
+        }
+      })
+      if (checkIn.data.code === 201) {
+        window.toastr.success("ស្នើភ្ជាប់ទៅម៉ាស៊ីនមេបានជោគជ័យ! រងចាំអនុញ្ញាត្តពី Admin!");
+      } else {
+        window.toastr.success("អ្នកបានភ្ចាប់រួចរាល់ហើយ");
+      }
     },
     login() {
       let vm = this;

@@ -66,23 +66,10 @@ const router = createRouter({
     routes
 })
 
-import {useAuthStore} from "@/store/auth";
+// import {useAuthStore} from "@/store/auth";
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token')
-    const user = useAuthStore();
-    switch (to.meta.roles) {
-        case "Admin":
-            user.role === "Admin" ? next() : next("/scan");
-            break;
-        case "Teacher":
-            user.role === "Teacher" ? next() : next("/checkInByDay");
-            break;
-        default:
-            next();
-            break;
-    }
-
     if (to.name === 'register') {
         next();
     } else if (to.meta.requiresAuth && !token) {

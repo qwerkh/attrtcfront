@@ -4,6 +4,14 @@ import router from './router'
 import vuetify from './plugins/vuetify'
 import { createPinia } from 'pinia'
 import { loadFonts } from './plugins/webfontloader'
+import $ from 'jquery'
+window.$ = window.jQuery = $
+
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
+window.toastr = toastr
+
 const pinia = createPinia()
 import moment from 'moment-timezone';
 moment.tz.setDefault("Asia/Bangkok");

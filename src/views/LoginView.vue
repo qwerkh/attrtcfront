@@ -71,12 +71,17 @@
   <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card class="form-card" elevation="10" :loading="loading">
+        <v-card :loading="loading" variant="flat">
+          <v-card-title class="d-flex justify-center">
+            <img src="/logo.png" style="height: 130px; width: auto;" class="mb-4 mt-2"
+                 alt="logo"/>
+          </v-card-title>
           <!-- Title -->
           <v-card-text class="text-h6 text-center">
-            Login
+            រដ្ឋាករទឹកបាត់ដំបង<br>
+            AMS System
           </v-card-text>
-<!--          <div id="telegram-login" ref="telegramBtn"></div>-->
+          <!--          <div id="telegram-login" ref="telegramBtn"></div>-->
           <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
@@ -84,16 +89,16 @@
           <v-card-text>
             <v-form ref="form" v-model="valid">
               <v-text-field
-                  v-model="user.email"
-                  label="Email"
-                  prepend-inner-icon="mdi-email"
-                  :rules="emailRules"
+                  v-model="user.phoneNumber"
+                  label="លេខទូរស័ព្ទ"
+                  prepend-inner-icon="mdi-phone-lock"
+                  :rules="phoneNumberRules"
                   required
               />
 
               <v-text-field
                   v-model="user.password"
-                  label="Password"
+                  label="លេខសំងាត់"
                   prepend-inner-icon="mdi-lock"
                   :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="showPassword ? 'text' : 'password'"
@@ -114,14 +119,14 @@
                 block
                 @click="login"
             >
-              Login
+              ចូលប្រើប្រាស់
             </v-btn>
             <br>
 
           </v-card-actions>
-          <div class="register-text" style="margin-bottom: 20px">
-            Don't have an account? <a @click="gotoRegister" class="register-link">Register</a>
-          </div>
+          <!--          <div class="register-text" style="margin-bottom: 20px">
+                      គ្មានគណនី? <a @click="gotoRegister" class="register-link">បង្កើតគណនី</a>
+                    </div>-->
         </v-card>
       </v-col>
     </v-row>
@@ -131,7 +136,7 @@
 <script>
 import axios from 'axios'
 import {useAuthStore} from "@/store/auth.js"
-import {getDeviceId} from '@/lib/GlobalFn';
+// import {getDeviceId} from '@/lib/GlobalFn';
 
 export default {
   name: "LoginView",
@@ -139,109 +144,21 @@ export default {
     return {
       valid: false,
       user: {
-        email: "",
+        phoneNumber: "",
         password: "",
       },
       loading: false,
       error: null,
       showPassword: false,
-      emailRules: [
-        v => !!v || "Email is required",
-        v => /.+@.+\..+/.test(v) || "Email must be valid"
+      phoneNumberRules: [
+        v => !!v || "ត្រូវបញ្ចូលលេខទូរស័ព្ទ",
       ],
       passwordRules: [
-        v => !!v || "Password is required",
-        v => v.length >= 6 || "Minimum 6 characters"
+        v => !!v || "ត្រូវបញ្ចូលលេខសំងាត់",
       ]
     };
   },
-  mounted() {
-    // window.onTelegramAuth = this.onTelegramAuth.bind(this);
-    /*window.onTelegramAuth = this.onTelegramAuth;
-    this.loadTelegramWidget();*/
-  },
-  /*mounted() {
-    // 1️⃣ Define the global callback BEFORE loading the script
-    window.onTelegramAuth = (user) => {
-      console.log("Telegram auth object:", user);
-      this.user = user; // store user in Vue reactive data
-      // TODO: send 'user' to backend to verify hash
-    };
-
-    // 2️⃣ Dynamically inject the Telegram widget script
-    const script = document.createElement("script");
-    script.src = "https://telegram.org/js/telegram-widget.js?22";
-    script.async = true;
-    script.setAttribute("data-telegram-login", "attrpitsbbot"); // your bot username
-    script.setAttribute("data-size", "large");
-    script.setAttribute("data-request-access", "write");
-    script.setAttribute("data-userpic", "false");
-    script.setAttribute("data-on-auth", "onTelegramAuth"); // just the function name
-
-    const container = document.getElementById("telegram-login");
-    container.innerHTML = ""; // clear old widget if any
-    container.appendChild(script);
-
-    console.log("Telegram widget script injected");
-  },*/
   methods: {
-    /*onTelegramAuth(user) {
-      console.log("Telegram user:", user);
-
-    },*/
-    /*loadTelegramWidget() {
-      // Make callback global (Telegram requirement)
-      // window.onTelegramAuth = this.onTelegramAuth.bind(this);
-
-      // Remove existing widget if remounted
-      if (this.$refs.telegramBtn.firstChild) {
-        this.$refs.telegramBtn.innerHTML = "";
-      }
-
-      const script = document.createElement("script");
-      script.src = "https://telegram.org/js/telegram-widget.js?22";
-      script.async = true;
-
-      script.setAttribute("data-telegram-login", process.env.VUE_APP_TELEGRAM_BOT_USERNAME);
-      script.setAttribute("data-size", "large");
-      script.setAttribute("data-userpic", "true");
-      script.setAttribute("data-request-access", "write");
-      window.onTelegramAuth = this.onTelegramAuth;
-      // script.setAttribute('data-onauth', 'onTelegramAuth(user)');
-      script.setAttribute('data-auth-url', 'https://attrtcfront.vercel.app/auth/telegram');
-      // Remove data-onauth completely
-      console.log("Jol0");
-      script.async = true;
-      this.$refs.telegramBtn.appendChild(script);
-    },
-    async onTelegramAuth(user) {
-      try {
-        console.log(user);
-        /!*const res = await fetch(process.env.VUE_APP_API_URL + "/auth/telegram", {
-          method: "POST",
-          headers: {
-            token: process.env.VUE_APP_API_SECRET,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        });
-        console.log(res);
-        const data = await res.json();
-
-        if (data.success) {
-          console.log("Logged in:", data.user);
-
-          // Example: store token / user
-          // localStorage.setItem("token", data.token);
-
-          this.$emit("login-success", data.user);
-        } else {
-          console.error("Telegram login failed");
-        }*!/
-      } catch (err) {
-        console.error("Auth error:", err);
-      }
-    },*/
     gotoRegister() {
       this.$router.push('/register');
     },
@@ -249,27 +166,27 @@ export default {
       let vm = this;
       vm.loading = true;
       vm.error = null;
-      alert(getDeviceId());
+      // alert(getDeviceId());
       try {
         if ((await vm.$refs.form.validate()).valid === true) {
           const res = await axios({
             method: "post",
-            url: process.env.VUE_APP_API_URL + "/auth/login",
+            url: process.env.VUE_APP_API_URL + "/users/login",
             headers: {
               token: process.env.VUE_APP_API_SECRET
             },
             data: {
-              email: this.user.email,
+              username: this.user.phoneNumber,
               password: this.user.password,
             }
           })
-          if (res.status === 200) {
+          if (res.data.code === 200 || res.data.code === 201) {
             let useAuth = useAuthStore();
-            useAuth.login(res.data)
+            useAuth.login(res.data.data)
             // Redirect (if router used)
             vm.$router.push('/scan')
           } else {
-            alert(res.data.message)
+            window.toastr.error("លេខទូរស័ព្ទ ឬ លេខសំងាត់មិនត្រឹមត្រូវ!")
           }
         }
 
@@ -279,10 +196,10 @@ export default {
             err.response?.data?.message || 'Login failed';
         if (err.response) {
           // Server responded with a status other than 2xx
-          alert(err.response.data.message || "Login failed");
+          window.toastr.error("លេខទូរស័ព្ទ ឬ លេខសំងាត់មិនត្រឹមត្រូវ!")
         } else {
           // Network or other errors
-          alert("Network error. Please try again.");
+          window.toastr.error("Network error. Please try again.")
         }
 
       } finally {
@@ -387,4 +304,5 @@ export default {
 .register-link:hover {
   text-decoration: underline;
 }
+
 </style>
