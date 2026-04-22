@@ -71,6 +71,7 @@
 
 <script>
 import axios from 'axios'
+import {Constants} from "@/lib/Constant";
 
 export default {
   name: "LoginView",
@@ -110,7 +111,7 @@ export default {
             method: "post",
             url: process.env.VUE_APP_API_URL + "/auth/register",
             headers: {
-              token: process.env.VUE_APP_API_SECRET
+              token: Constants.VUE_APP_API_SECRET
             },
             data: {
               email: this.user.email,

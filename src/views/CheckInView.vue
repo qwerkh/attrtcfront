@@ -112,7 +112,6 @@ export default {
       let device = localStorage.getItem("device");
       navigator.geolocation.getCurrentPosition(
           async (position) => {
-            console.log(position.coords);
             const {latitude, longitude} = position.coords;
             //Check accuracy of location
             if (position.coords.accuracy > 100) {
@@ -134,7 +133,6 @@ export default {
                 device: device
               }
             })
-            console.log(checkIn);
             if (checkIn.data.code === 201) {
               vm.scannedResult = checkIn.data.data || "";
             }

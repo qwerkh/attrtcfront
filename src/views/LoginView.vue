@@ -136,6 +136,7 @@
 <script>
 import axios from 'axios'
 import {useAuthStore} from "@/store/auth.js"
+import {Constants} from "@/lib/Constant";
 // import {getDeviceId} from '@/lib/GlobalFn';
 
 export default {
@@ -167,22 +168,19 @@ export default {
       vm.loading = true;
       vm.error = null;
       // alert(getDeviceId());
-      console.log(process.env.VUE_APP_API_URL);
-      console.log(process.env.VUE_APP_API_SECRET);
       try {
         if ((await vm.$refs.form.validate()).valid === true) {
           const res = await axios({
             method: "post",
             url: process.env.VUE_APP_API_URL + "/users/login",
             headers: {
-              token: process.env.VUE_APP_API_SECRET
+              token: Constants.VUE_APP_API_SECRET
             },
             data: {
               username: this.user.phoneNumber,
               password: this.user.password,
             }
           })
-          console.log(res.data);
           if (res.data.code === 200 || res.data.code === 201) {
             let useAuth = useAuthStore();
             useAuth.login(res.data.data)
