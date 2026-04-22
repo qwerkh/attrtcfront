@@ -136,7 +136,6 @@
 <script>
 import axios from 'axios'
 import {useAuthStore} from "@/store/auth.js"
-import {Constants} from "@/lib/constant";
 // import {getDeviceId} from '@/lib/GlobalFn';
 
 export default {
@@ -168,13 +167,15 @@ export default {
       vm.loading = true;
       vm.error = null;
       // alert(getDeviceId());
+      console.log(process.env.VUE_APP_API_URL);
+      console.log(process.env.VUE_APP_API_SECRET);
       try {
         if ((await vm.$refs.form.validate()).valid === true) {
           const res = await axios({
             method: "post",
-            url: Constants.VUE_APP_API_URL + "/users/login",
+            url: process.env.VUE_APP_API_URL + "/users/login",
             headers: {
-              token: Constants.VUE_APP_API_SECRET
+              token: process.env.VUE_APP_API_SECRET
             },
             data: {
               username: this.user.phoneNumber,

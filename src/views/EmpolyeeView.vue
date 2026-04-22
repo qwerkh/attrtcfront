@@ -151,7 +151,6 @@
 import {useDisplay} from 'vuetify'
 import api from "@/util/axios";
 import {useAuthStore} from "@/store/auth";
-import {Constants} from "@/lib/constant";
 
 export default {
   name: 'EmployeeView',
@@ -212,7 +211,7 @@ export default {
       let useAuth = useAuthStore();
       const res = await api.request({
         method: "post",
-        url: Constants.VUE_APP_API_URL + "/employee/approve",
+        url: process.env.VUE_APP_API_URL + "/employee/approve",
         headers: {
           Authorization: `Bearer ${useAuth.token}`,
         },
@@ -231,7 +230,7 @@ export default {
       let useAuth = useAuthStore();
       const res = await api.request({
         method: "post",
-        url: Constants.VUE_APP_API_URL + "/employee/list",
+        url: process.env.VUE_APP_API_URL + "/employee/list",
         headers: {
           Authorization: `Bearer ${useAuth.token}`,
           // Authorization: `${vm.auth.token}`,
