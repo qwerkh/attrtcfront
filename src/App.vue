@@ -168,9 +168,9 @@ export default {
       let device = getDeviceId();
       let useAuth = useAuthStore();
       console.log(device);
-      const checkIn = await axios({
+      const requestDevice = await axios({
         method: "post",
-        url: process.env.VUE_APP_API_URL + "/employee/checkIn",
+        url: process.env.VUE_APP_API_URL + "/employee/requestDevice",
         headers: {
           token: `${useAuth.token}`,
         },
@@ -179,10 +179,15 @@ export default {
           device: device
         }
       })
-      if (checkIn.data.code === 201) {
+      window.toastr.options = {
+        "positionClass": "toast-top-center"
+      };
+      if (requestDevice.data.code === 201) {
         window.toastr.success("ស្នើភ្ជាប់ទៅម៉ាស៊ីនមេបានជោគជ័យ! រងចាំអនុញ្ញាត្តពី Admin!");
       } else {
-        window.toastr.success("អ្នកបានភ្ចាប់រួចរាល់ហើយ");
+        let message = requestDevice.data.message;
+        message = message.indexOf("duplicate") > -1 ? "បានស្នើសុំរួចម្តងហើយ" : message;
+        window.toastr.warning(message);
       }
     },
     login() {
