@@ -1,9 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
-import EmployeeView from '../views/EmpolyeeView.vue'
-import ChekInByDayView from '../views/CheckInByDay.vue'
 import ShowLatLng from '../views/ShowLatLng.vue'
+import ChangePassword from '../views/ChangePassword.vue'
 
 
 const routes = [
@@ -18,14 +17,9 @@ const routes = [
         component: RegisterView
     },
     {
-        path: '/showlatlng',
-        name: 'showlatlng',
-        component: ShowLatLng
-    },
-    {
-        path: '/employee',
-        name: 'employee',
-        component: EmployeeView,
+        path: '/changePassword',
+        name: 'changePassword',
+        component: ChangePassword,
         meta: {
             permissions: [
 
@@ -33,21 +27,13 @@ const routes = [
                     access: true,
                 }
             ],
-            roles: "Admin",
+            roles: "Employee",
         }
     },
     {
-        path: '/checkInByDay',
-        name: 'checkInByDay',
-        component: ChekInByDayView, meta: {
-            permissions: [
-
-                {
-                    access: true,
-                }
-            ],
-            roles: "Admin",
-        }
+        path: '/showlatlng',
+        name: 'showlatlng',
+        component: ShowLatLng
     },
     {
         path: '/scan',
@@ -63,7 +49,7 @@ const routes = [
                     access: true,
                 }
             ],
-            roles: "Teacher",
+            roles: "Employee",
         }
     }
 ]
@@ -73,19 +59,20 @@ const router = createRouter({
     routes
 })
 
-// import {useAuthStore} from "@/store/auth";
+import {useAuthStore} from "@/store/auth";
 
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('token')
-    if (to.name === 'register') {
-        next();
-    } else if (to.meta.requiresAuth && !token) {
-        next('/')
-    } else if (to.path === '/' && token) {
-        next('/Scan')
-    } else {
-        next()
+        console.log(useAuthStore().roles);
+        switch (to.meta.roles) {
+            case "Employee":
+                useAuthStore().roles.indexOf(to.meta.roles) > -1 ? next() : next("/");
+                // !!GlobalFn.CheckRoles({roles: Constants.entryReport}) ? next() : !!Meteor.userId() ? "" : next("/login");
+                break;
+            default:
+                next();
+                break;
+        }
     }
-})
+)
 
 export default router

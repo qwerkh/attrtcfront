@@ -137,7 +137,13 @@ export default {
           title: 'Scan Attendance',
           action: "mdi-fullscreen",
           to: "/scan",
-          hasRole: () => true
+          hasRole: () => useAuthStore().roles.indexOf("Employee")>-1
+        },
+        {
+          title: 'ប្តូរលេខសំងាត់',
+          action: "mdi-lock-reset",
+          to: "/changePassword",
+          hasRole: () => useAuthStore().roles.indexOf("Employee")>-1
         }
       ],
     };

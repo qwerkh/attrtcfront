@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", {
         refreshToken: localStorage.getItem('refreshToken') || "",
         isAdmin: localStorage.getItem('isAdmin') || "",
         device: localStorage.getItem('device') || "",
+        roles: localStorage.getItem('roles') || "",
     }),
     actions: {
         setTokens(access, refresh) {
@@ -28,6 +29,7 @@ export const useAuthStore = defineStore("auth", {
             this.name = '';
             this.token = '';
             this.isAdmin = '';
+            this.roles = [];
             this.refreshToken = '';
             localStorage.setItem('device', device);
             router.push('/')
@@ -39,6 +41,7 @@ export const useAuthStore = defineStore("auth", {
             this.token = user.token;
             this.refreshToken = user.refreshToken || "";
             this.isAdmin = user.isAdmin;
+            this.roles = user.roles;
 
             localStorage.setItem('token', user.token);
             localStorage.setItem('userId', user._id);
@@ -46,6 +49,7 @@ export const useAuthStore = defineStore("auth", {
             localStorage.setItem('name', user.profile.fullName);
             localStorage.setItem('refreshToken', user.refreshToken);
             localStorage.setItem('isAdmin', user.isAdmin);
+            localStorage.setItem('roles', user.roles);
         },
         /*async refreshAccessToken() {
             try {

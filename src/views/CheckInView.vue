@@ -18,15 +18,15 @@
             <template v-slot:prepend>
               <v-icon color="white"></v-icon>
             </template>
-            Check Attendance
+            ចុះវត្តមាន
           </v-btn>
           <v-btn :loading="!isScan" v-if="isScan===true" elevated size="x-large" @click="refreshPage"
                  prepend-icon="mdi-arrow-left"
-                 dark color="success">
+                 dark color="warning">
             <template v-slot:prepend>
               <v-icon color="white"></v-icon>
             </template>
-            Back to Employee List
+            ត្រលប់ក្រោយ
           </v-btn>
         </v-col>
 
