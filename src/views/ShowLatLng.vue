@@ -17,6 +17,13 @@
         </v-col>
 
         <v-col cols="12" sm="12" style="margin-top: 20px;text-align: center">
+          <v-btn x-large
+                 color="secondary"
+                 dark @click="copyText">
+            <v-icon>mdi-content-copy</v-icon>  &nbsp; Copy
+          </v-btn>
+        </v-col>
+        <v-col cols="12" sm="12" style="margin-top: 20px;text-align: center">
           <h2>Latitude: {{ latitude }}</h2><br>
           <h2>Longitude: {{ longitude }}</h2><br>
           <v-skeleton-loader
@@ -50,6 +57,14 @@ export default {
   },
 
   methods: {
+    async copyText() {
+      try {
+        await navigator.clipboard.writeText("Latitude : " + this.latitude + " Longitude : " + this.longitude);
+        window.toastr.success("Copy បានជោគជ័យ!");
+      } catch (err) {
+        console.error('Copy failed', err)
+      }
+    },
     async checkLocation() {
       let vm = this;
       vm.isScan = true;
