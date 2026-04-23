@@ -104,7 +104,7 @@ export default {
       window.location.reload();
     },
     removeSign(text) {
-      return text.replace(/\[\[|\]\]/g, '')
+      return text.replace(/\[|\]/g, '')
     },
     async checkInAttendance() {
       let vm = this;

@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-form
@@ -74,8 +74,70 @@
       </v-form>
     </v-row>
   </v-container>
-</template>
+</template>-->
+<template>
+  <v-container class="fill-height">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card border="0" elevation="0" rounded="xl" class="pa-3">
 
+          <v-card-title class="text-center">
+            <h2 class="w-100">ប្តូរលេខសំងាត់</h2>
+          </v-card-title>
+
+          <v-form v-model="valid" ref="formData" lazy-validation>
+            <v-text-field
+                class="mb-3"
+                v-model="user.username"
+                label="លេខទូរស័ព្ទ"
+                disabled
+            />
+
+            <v-text-field
+                class="mb-3"
+                label="លេខសំងាត់ចាស់"
+                v-model="user.oldPassword"
+                :type="showOldPassword ? 'text' : 'password'"
+                :append-inner-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showOldPassword = !showOldPassword"
+            />
+
+            <v-text-field
+                class="mb-3"
+                label="លេខសំងាត់ថ្មី"
+                v-model="user.password"
+                :type="showNewPassword ? 'text' : 'password'"
+                :append-inner-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showNewPassword = !showNewPassword"
+            />
+
+            <v-text-field
+                class="mb-4"
+                label="បញ្ចាក់លេខសំងាត់ថ្មី"
+                v-model="user.confirmPassword"
+                :type="showNewConfirmPassword ? 'text' : 'password'"
+                :append-inner-icon="showNewConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showNewConfirmPassword = !showNewConfirmPassword"
+            />
+
+            <v-btn
+                block
+                color="success"
+                size="large"
+                rounded="xl"
+                @click="handleSubmit()"
+            >
+              <v-icon start>mdi-check-circle</v-icon>
+              រក្សទុក
+            </v-btn>
+
+          </v-form>
+
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
 <script>
 import {useAuthStore} from "@/store/auth";
 import axios from "axios";
