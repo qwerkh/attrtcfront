@@ -85,6 +85,7 @@ export default {
             }
             vm.latitude = latitude;
             vm.longitude = longitude;
+            vm.loading = false;
           },
           () => {
             vm.loading = false;
