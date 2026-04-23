@@ -62,11 +62,9 @@ const router = createRouter({
 import {useAuthStore} from "@/store/auth";
 
 router.beforeEach((to, from, next) => {
-        console.log(useAuthStore().roles);
         switch (to.meta.roles) {
             case "Employee":
                 useAuthStore().roles.indexOf(to.meta.roles) > -1 ? next() : next("/");
-                // !!GlobalFn.CheckRoles({roles: Constants.entryReport}) ? next() : !!Meteor.userId() ? "" : next("/login");
                 break;
             default:
                 next();

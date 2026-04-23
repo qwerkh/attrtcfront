@@ -12,6 +12,8 @@ export const useAuthStore = defineStore("auth", {
         isAdmin: localStorage.getItem('isAdmin') || "",
         device: localStorage.getItem('device') || "",
         roles: localStorage.getItem('roles') || "",
+        gender: localStorage.getItem('gender') || "",
+        url: localStorage.getItem('url') || "",
     }),
     actions: {
         setTokens(access, refresh) {
@@ -29,6 +31,8 @@ export const useAuthStore = defineStore("auth", {
             this.name = '';
             this.token = '';
             this.isAdmin = '';
+            this.gender = '';
+            this.url = '';
             this.roles = [];
             this.refreshToken = '';
             localStorage.setItem('device', device);
@@ -42,6 +46,8 @@ export const useAuthStore = defineStore("auth", {
             this.refreshToken = user.refreshToken || "";
             this.isAdmin = user.isAdmin;
             this.roles = user.roles;
+            this.gender = user.gender;
+            this.url = user.url;
 
             localStorage.setItem('token', user.token);
             localStorage.setItem('userId', user._id);
@@ -50,6 +56,8 @@ export const useAuthStore = defineStore("auth", {
             localStorage.setItem('refreshToken', user.refreshToken);
             localStorage.setItem('isAdmin', user.isAdmin);
             localStorage.setItem('roles', user.roles);
+            localStorage.setItem('gender', user.gender);
+            localStorage.setItem('url', user.url);
         },
         /*async refreshAccessToken() {
             try {

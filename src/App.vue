@@ -20,10 +20,16 @@
         <v-list dense nav shaped>
           <v-list-item>
             <v-list-item-avatar>
-              <v-img
-                  src="https://img.freepik.com/premium-vector/professional-male-avatar-profile-picture-employee-work_1322206-66590.jpg"></v-img>
+              <v-img v-if="userDoc.url==='' && userDoc.gender==='1'"
+                     src="/profile-male.png"></v-img>
+              <v-img v-if="userDoc.url==='' && userDoc.gender==='2'"
+                     src="/profile-female.png"></v-img>
+
+              <v-img v-if="userDoc.url!=='' && userDoc.url!==null && userDoc.url!==undefined"
+                     :src="userDoc.url"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
+              <br>
               <v-list-item-title>{{ userDoc.name }}</v-list-item-title>
               <v-list-item-subtitle>{{ userDoc.username }}</v-list-item-subtitle>
             </v-list-item-content>
@@ -134,16 +140,16 @@ export default {
           hasRole: () => useAuthStore().role == "Admin"
         },*/
         {
-          title: 'Scan Attendance',
+          title: 'ចុះវត្តមាន',
           action: "mdi-fullscreen",
           to: "/scan",
-          hasRole: () => useAuthStore().roles.indexOf("Employee")>-1
+          hasRole: () => useAuthStore().roles.indexOf("Employee") > -1
         },
         {
           title: 'ប្តូរលេខសំងាត់',
           action: "mdi-lock-reset",
           to: "/changePassword",
-          hasRole: () => useAuthStore().roles.indexOf("Employee")>-1
+          hasRole: () => useAuthStore().roles.indexOf("Employee") > -1
         }
       ],
     };

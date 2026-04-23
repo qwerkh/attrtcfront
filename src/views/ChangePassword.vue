@@ -5,10 +5,11 @@
           :model="valid" ref="formData"
           lazy-validation
       >
-        <v-img
-            cover
-            src="https://img.freepik.com/premium-vector/professional-male-avatar-profile-picture-employee-work_1322206-66590.jpg"></v-img>
         <v-row>
+          <v-col cols="12" class="text-center">
+            <h2>ប្តូរលេខសំងាត់</h2>
+          </v-col>
+
           <v-col cols="12" md="12" sm="12">
             <v-text-field
                 v-model="user.username"
@@ -19,23 +20,35 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="12" sm="12">
-            <v-text-field label="លេខសំងាត់ចាស់" type="password" required
+            <v-text-field label="លេខសំងាត់ចាស់"  required
                           v-model="user.oldPassword"
                           :rules="passwordRules"
+                          autocomplete
+                          :append-inner-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                          :type="showOldPassword ? 'text' : 'password'"
+                          @click:append-inner="showOldPassword = !showOldPassword"
             ></v-text-field>
           </v-col>
 
 
           <v-col cols="12" md="12" sm="12">
-            <v-text-field label="លេខសំងាត់ថ្មី" type="password" required
+            <v-text-field label="លេខសំងាត់ថ្មី" required
                           v-model="user.password"
                           :rules="passwordRules"
+                          autocomplete
+                          :append-inner-icon="showNewPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                          :type="showNewPassword ? 'text' : 'password'"
+                          @click:append-inner="showNewPassword = !showNewPassword"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="12" sm="12">
-            <v-text-field label="បញ្ចាក់លេខសំងាត់ថ្មី" type="password" required
+            <v-text-field label="បញ្ចាក់លេខសំងាត់ថ្មី" required
                           v-model="user.confirmPassword"
+                          autocomplete
                           :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                          :append-inner-icon="showNewConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                          :type="showNewConfirmPassword ? 'text' : 'password'"
+                          @click:append-inner="showNewConfirmPassword = !showNewConfirmPassword"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="12" sm="12" style="text-align: center">
@@ -49,6 +62,7 @@
                      large
                      outlined
                      x-large
+                     @click="handleSubmit()"
                      rounded
                      :elevation="hover ? 16 :0"
               >
@@ -64,6 +78,7 @@
 
 <script>
 import {useAuthStore} from "@/store/auth";
+import axios from "axios";
 
 export default {
   data() {
@@ -77,13 +92,16 @@ export default {
         password: "",
         confirmPassword: "",
       },
+      showOldPassword: false,
+      showNewPassword: false,
+      showNewConfirmPassword: false,
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+        v => (v && v.length >= 3) || 'Password must be more than 6 characters',
       ],
       confirmPasswordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more than 6 characters',
+        v => (v && v.length >= 3) || 'Password must be more than 6 characters',
       ],
     }
   },
@@ -92,6 +110,7 @@ export default {
     resetForm() {
       this.$refs.formData.reset()
     },
+
     /*onFileSelected(e) {
       let vm = this;
       this.selectedFile = e.target.files[0];
@@ -122,51 +141,35 @@ export default {
           }
       );
     },*/
-    handleSubmit() {
-      // let vm = this;
+    async handleSubmit() {
+      let vm = this;
 
-      /*if (vm.$refs.formData.validate()) {
+      if (vm.$refs.formData.validate()) {
         vm.loading = true;
-
-        Accounts.changePassword(vm.user.oldPassword, vm.user.password, (err, result) => {
-          if (!err) {
-            this.$message({
-              message: this.$t('successNotification'),
-              showClose: true,
-              type: 'success'
-            });
-            vm.loading = false;
-            vm.$store.dispatch("logoutUser");
-          } else {
-            console.log(err.message);
-            this.$message({
-              message: err.message,
-              showClose: true,
-              type: 'error'
-            });
-
+        let useAuth = useAuthStore();
+        const response = await axios({
+          method: "post",
+          url: process.env.VUE_APP_API_URL + "/user/changePassword",
+          headers: {
+            token: `${useAuth.token}`,
+          },
+          data: {
+            userId: useAuth.userId,
+            oldPassword: vm.user.oldPassword,
+            newPassword: vm.user.password,
           }
         })
-        /!*Meteor.call("base_updateProfile", vm.user._id, vm.user,Constants.secret (err, result) => {
-            if (!err) {
-                this.$message({
-                    message: this.$t('successNotification'),
-                    showClose: true,
-                    type: 'success'
-                });
-                vm.updateUser(Meteor.user());
-                vm.loading = false;
-            } else {
-                console.log(err.message);
-                this.$message({
-                    message: err.message,
-                    showClose: true,
-                    type: 'error'
-                });
-
-            }
-        })*!/
-      }*/
+        window.toastr.options = {
+          "positionClass": "toast-top-center"
+        };
+        if (response.data.code === 201) {
+          window.toastr.success("ប្តូរលេខសំងាត់បានជោគជ័យ!");
+        } else {
+          let message = response.data.message;
+          window.toastr.warning(message);
+        }
+        vm.loading = false;
+      }
     },
 
   },

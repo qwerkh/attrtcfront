@@ -81,8 +81,6 @@
             រដ្ឋាករទឹកបាត់ដំបង<br>
             AMS System
           </v-card-text>
-          <!--          <div id="telegram-login" ref="telegramBtn"></div>-->
-          <v-divider class="my-4"></v-divider>
 
           <!-- Form -->
 
@@ -93,6 +91,7 @@
                   label="លេខទូរស័ព្ទ"
                   prepend-inner-icon="mdi-phone-lock"
                   :rules="phoneNumberRules"
+                  inputmode="numeric"
                   required
               />
 
@@ -181,7 +180,6 @@ export default {
               password: this.user.password,
             }
           })
-          console.log(res.data.data);
           if (res.data.code === 200 || res.data.code === 201) {
             let useAuth = useAuthStore();
             useAuth.login(res.data.data)

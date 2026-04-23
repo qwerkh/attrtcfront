@@ -8,6 +8,7 @@
         </v-col>
         <v-col cols="12" sm="12" style="margin-bottom: 20px;text-align: center">
           <h2>សូមចុចប៊ូតុងខាងក្រោមដើម្បីចុះវត្តមាន</h2>
+          <h3> (បញ្ចាក់៖ សូមជ្រើសរើស <b>allow ទីតាំង</b> នៅពេលលោតសារអោយជ្រើសរើស)</h3>
         </v-col>
 
         <v-col cols="auto">
@@ -41,7 +42,6 @@
             ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}
           </h1>
           <h1 style="color: red" v-if="code>250">
-            មិនអាចចុះវត្តមានបានទេ<br>
             {{ message }}<br>
             ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}
           </h1>
