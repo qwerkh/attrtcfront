@@ -45,6 +45,7 @@
             :title="subItem.title"
             :key="subItem.title"
             value="home"
+            style="line-height: 1.8rem !important;"
             tag="a"
             v-show="subItem.hasRole()"
             :to="subItem.to"
@@ -236,4 +237,8 @@ export default {
 
 <style>
 /* Optional global styles */
+
+.v-list-item--nav .v-list-item-title {
+  line-height: 1.8rem !important;
+}
 </style>

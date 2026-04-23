@@ -39,12 +39,15 @@
 
           <h1 v-if="scannedResult && code<250">
             ចុះវត្តមានបានជោគជ័យ ! <br><br>
-            ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}
+            <!--            ថ្ងៃ :{{ currentDate }}<br>-->
+            ម៉ោង :{{ currentTime }}
           </h1>
           <h1 style="color: red" v-if="code>250">
-            {{ message }}<br>
-            ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}
+            {{ removeSign(message) }}<br>
+            <!--            ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}-->
           </h1>
+
+
 
           <v-skeleton-loader
               v-if="loading"
@@ -100,6 +103,9 @@ export default {
       this.loading = false;
       window.location.reload();
     },
+    removeSign(text) {
+      return text.replace(/\[\[|\]\]/g, '')
+    },
     async checkInAttendance() {
       let vm = this;
       vm.isScan = true;
@@ -145,6 +151,10 @@ export default {
           () => {
             vm.loading = false;
             window.toastr.error("សូមបើកសិទ្ធទីតាំងនៅក្នុងទូរស័ព្ទដៃ (Please enable location access)!");
+           /* vm.howtoenablelocation=`
+              Iphone: Setting -> Privacy and Security -> Location Services -> ស្វែងរក Safari Website -> Tick While Using the App <br>
+              Android:
+            `;*/
           },
           {
             enableHighAccuracy: true,
