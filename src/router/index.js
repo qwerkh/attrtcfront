@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import EmployeeView from '../views/EmpolyeeView.vue'
 import ChekInByDayView from '../views/CheckInByDay.vue'
+import ShowLatLng from '../views/ShowLatLng.vue'
 
 
 const routes = [
@@ -15,6 +16,11 @@ const routes = [
         path: '/register',
         name: 'register',
         component: RegisterView
+    },
+    {
+        path: '/showlatlng',
+        name: 'showlatlng',
+        component: ShowLatLng
     },
     {
         path: '/employee',
