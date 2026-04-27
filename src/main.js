@@ -14,6 +14,7 @@ window.toastr = toastr
 
 const pinia = createPinia()
 import moment from 'moment-timezone';
+import './registerServiceWorker'
 moment.tz.setDefault("Asia/Bangkok");
 loadFonts()
 
