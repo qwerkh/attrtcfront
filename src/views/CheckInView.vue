@@ -14,12 +14,15 @@
         <v-col cols="auto">
           <v-btn :loading="isScan" v-if="isScan!==true" :disabled="!!isScan" elevated size="x-large"
                  @click="checkInAttendance"
-                 prepend-icon="mdi-fullscreen"
-                 dark color="primary">
+                 style="font-weight: bold;"
+                 dark :color="title==='CheckIn' ? 'green' :'red'">
             <template v-slot:prepend>
-              <v-icon color="white"></v-icon>
+              <v-icon color="white">
+                {{ title === 'CheckIn' ? 'mdi-clock-in' : 'mdi-clock-out' }}
+              </v-icon>
             </template>
-            ចុះវត្តមាន
+
+            {{ title === "CheckIn" ? "ចូលធ្វើការ" : "ចេញពីធ្វើការ" }}
           </v-btn>
           <v-btn :loading="!isScan" v-if="isScan===true" elevated size="x-large" @click="refreshPage"
                  prepend-icon="mdi-arrow-left"
@@ -46,7 +49,6 @@
             {{ removeSign(message) }}<br>
             <!--            ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}-->
           </h1>
-
 
 
           <v-skeleton-loader
@@ -90,12 +92,17 @@ export default {
       currentTime: moment().format("HH:mm:ss"),
       officeLatitude: "",
       officeLongitude: "",
+      title: "CheckIn"
     }
   },
   computed: {
     userDoc() {
       return useAuthStore();
     }
+  },
+  created() {
+    let vm = this;
+    vm.checkStatusUser();
   },
   methods: {
     refreshPage() {
@@ -151,16 +158,34 @@ export default {
           () => {
             vm.loading = false;
             window.toastr.error("សូមបើកសិទ្ធទីតាំងនៅក្នុងទូរស័ព្ទដៃ (Please enable location access)!");
-           /* vm.howtoenablelocation=`
-              Iphone: Setting -> Privacy and Security -> Location Services -> ស្វែងរក Safari Website -> Tick While Using the App <br>
-              Android:
-            `;*/
+            /* vm.howtoenablelocation=`
+               Iphone: Setting -> Privacy and Security -> Location Services -> ស្វែងរក Safari Website -> Tick While Using the App <br>
+               Android:
+             `;*/
           },
           {
             enableHighAccuracy: true,
             timeout: 10000
           }
       );
+    },
+    async checkStatusUser() {
+      let vm = this;
+      let useAuth = useAuthStore();
+      const checkStatus = await axios({
+        method: "post",
+        url: process.env.VUE_APP_API_URL + "/employee/checkStatus",
+        headers: {
+          token: `${useAuth.token}`,
+        },
+        data: {
+          userId: vm.userDoc.userId,
+        }
+      })
+      if (checkStatus.data.code === 201) {
+        vm.title = checkStatus.data.data || "";
+      }
+
     }
   }
 }
