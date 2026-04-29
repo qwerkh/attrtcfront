@@ -108,6 +108,9 @@ export default {
     refreshPage() {
       this.isScan = false;
       this.loading = false;
+      this.scannedResult="";
+      this.message="";
+      this.code=200;
       window.location.reload();
     },
     removeSign(text) {
