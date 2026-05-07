@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <v-container>
     <div class="attendance-container">
       <v-row align="center" justify="center" style="margin-bottom: 20px">
@@ -42,12 +42,12 @@
 
           <h1 v-if="scannedResult && code<250">
             ចុះវត្តមានបានជោគជ័យ ! <br><br>
-            <!--            ថ្ងៃ :{{ currentDate }}<br>-->
+            &lt;!&ndash;            ថ្ងៃ :{{ currentDate }}<br>&ndash;&gt;
             ម៉ោង :{{ currentTime }}
           </h1>
           <h1 style="color: red" v-if="code>250">
             {{ removeSign(message) }}<br>
-            <!--            ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}-->
+            &lt;!&ndash;            ថ្ងៃ :{{ currentDate }}<br>ម៉ោង :{{ currentTime }}&ndash;&gt;
           </h1>
 
 
@@ -61,12 +61,146 @@
 
     </div>
   </v-container>
-</template>
+</template>-->
 
+<template>
+  <v-container fluid class="attendance-page pa-4">
+    <v-row justify="center" align="center" class="fill-height">
+      <v-col cols="12" sm="10" md="6" lg="5">
+
+        <v-card class="attendance-card" elevation="0">
+
+          <!-- Top Gradient -->
+          <div class="top-wave"></div>
+
+          <v-card-text class="text-center px-6 py-10">
+
+            <!-- Avatar -->
+            <v-avatar size="90" class="mb-4 profile-avatar">
+              <v-img v-if="userDoc.url==='' && userDoc.gender==='1'"
+                     src="/profile-male.png"></v-img>
+              <v-img v-if="userDoc.url==='' && userDoc.gender==='2'"
+                     src="/profile-female.png"></v-img>
+            </v-avatar>
+
+            <!-- User Info -->
+            <h1 class="employee-name">{{ userDoc.name }}</h1>
+            <p class="employee-id">{{ userDoc.username }}</p>
+
+            <!-- Instruction -->
+            <div class="instruction-box mt-6">
+              <h2 class="instruction-title">
+                សូមចុចប៊ូតុងខាងក្រោមដើម្បីចុះវត្តមាន
+              </h2>
+
+              <p class="instruction-subtitle">
+                សូមអនុញ្ញាត <b>Location Permission</b> នៅពេលមានសារលោតឡើង
+              </p>
+            </div>
+
+            <!-- Action Button -->
+            <div class="mt-8">
+
+              <!-- Check In / Out -->
+              <v-btn
+                  v-if="!isScan"
+                  :loading="isScan"
+                  :disabled="!!isScan"
+                  @click="checkInAttendance"
+                  class="attendance-btn"
+                  :class="title === 'CheckIn' ? 'checkin-btn' : 'checkout-btn'"
+                  size="x-large"
+              >
+                <v-icon start size="24">
+                  {{ title === 'CheckIn'
+                    ? 'mdi-clock-check-outline'
+                    : 'mdi-clock-remove-outline'
+                  }}
+                </v-icon>
+
+                {{
+                  title === "CheckIn"
+                      ? "ចូលធ្វើការ"
+                      : "ចេញពីធ្វើការ"
+                }}
+              </v-btn>
+
+              <!-- Back Button -->
+              <v-btn
+                  v-else
+                  @click="refreshPage"
+                  color="warning"
+                  size="x-large"
+                  class="attendance-btn"
+              >
+                <v-icon start>mdi-arrow-left</v-icon>
+                ត្រលប់ក្រោយ
+              </v-btn>
+            </div>
+
+            <!-- Success Result -->
+            <div
+                v-if="scannedResult && code < 250"
+                class="result-card success-card mt-8"
+            >
+              <v-icon size="60" color="success">
+                mdi-check-circle
+              </v-icon>
+
+              <h2 class="mt-3 success-text">
+                ចុះវត្តមានបានជោគជ័យ
+              </h2>
+
+              <p class="time-text">
+                ម៉ោង : {{ currentTime }}
+              </p>
+            </div>
+
+            <!-- Error Result -->
+            <div
+                v-if="code > 250"
+                class="result-card error-card mt-8"
+            >
+              <v-icon size="60" color="red">
+                mdi-alert-circle
+              </v-icon>
+
+              <h2 class="mt-3 error-text">
+                {{ removeSign(message) }}
+              </h2>
+            </div>
+
+            <v-btn
+                v-if="removeSign(message)==='សូមចុចប៊ូតុងខាងក្រោមដើម្បី ភ្ជាប់ជាមួយម៉ាស៊ីនមេ!'"
+                class="server-btn mt-7"
+                @click="connectToServer"
+            >
+              <v-icon start size="18">
+                mdi-connection
+              </v-icon>
+
+              ភ្ជាប់ម៉ាស៊ីនមេ
+            </v-btn>
+
+            <!-- Loading -->
+            <v-skeleton-loader
+                v-if="loading"
+                type="card"
+                class="mt-6"
+            />
+
+          </v-card-text>
+        </v-card>
+
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
 <script>
 import {useAuthStore} from "@/store/auth";
 import moment from 'moment';
 import axios from "axios";
+import {getDeviceId} from "@/lib/GlobalFn";
 
 export default {
   name: 'CheckInView',
@@ -112,6 +246,31 @@ export default {
       this.message="";
       this.code=200;
       window.location.reload();
+    },
+    async connectToServer() {
+      let device = getDeviceId();
+      let useAuth = useAuthStore();
+      const requestDevice = await axios({
+        method: "post",
+        url: process.env.VUE_APP_API_URL + "/employee/requestDevice",
+        headers: {
+          token: `${useAuth.token}`,
+        },
+        data: {
+          userId: useAuth.userId,
+          device: device
+        }
+      })
+      window.toastr.options = {
+        "positionClass": "toast-top-center"
+      };
+      if (requestDevice.data.code === 201) {
+        window.toastr.success("ស្នើភ្ជាប់ទៅម៉ាស៊ីនមេបានជោគជ័យ! រងចាំអនុញ្ញាត្តពី Admin!");
+      } else {
+        let message = requestDevice.data.message;
+        message = message.indexOf("duplicate") > -1 ? "បានស្នើសុំរួចម្តងហើយ" : message;
+        window.toastr.warning(message);
+      }
     },
     removeSign(text) {
       return text.replace(/\[|\]/g, '')
@@ -193,3 +352,190 @@ export default {
   }
 }
 </script>
+
+
+<style scoped>
+
+.attendance-page {
+  min-height: 100vh;
+  background:
+      linear-gradient(
+          135deg,
+          #eef2ff 0%,
+          #f8fafc 50%,
+          #ffffff 100%
+      );
+}
+
+/* Main Card */
+.attendance-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  box-shadow:
+      0 10px 40px rgba(0,0,0,0.08);
+}
+
+/* Top Wave */
+.top-wave {
+  height: 170px;
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      );
+  border-bottom-left-radius: 50% 20%;
+  border-bottom-right-radius: 50% 20%;
+}
+
+/* Avatar */
+.profile-avatar {
+  margin-top: -95px;
+  border: 6px solid white;
+  box-shadow:
+      0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* User Info */
+.employee-name {
+  font-size: 30px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.employee-id {
+  color: #64748b;
+  font-size: 16px;
+  margin-top: 6px;
+}
+
+/* Instruction Box */
+.instruction-box {
+  background: #f8fafc;
+  padding: 18px;
+  border-radius: 18px;
+}
+
+.instruction-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0f172a;
+}
+
+.instruction-subtitle {
+  margin-top: 10px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+/* Main Button */
+.attendance-btn {
+  width: 100%;
+  height: 62px !important;
+  border-radius: 18px !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  color: white !important;
+  letter-spacing: 0.5px;
+  text-transform: none !important;
+  transition: 0.3s;
+}
+
+.attendance-btn:hover {
+  transform: translateY(-2px);
+}
+
+.checkin-btn {
+  background:
+      linear-gradient(
+          135deg,
+          #16a34a,
+          #22c55e
+      ) !important;
+  box-shadow:
+      0 8px 25px rgba(34,197,94,0.35);
+}
+
+.checkout-btn {
+  background:
+      linear-gradient(
+          135deg,
+          #dc2626,
+          #ef4444
+      ) !important;
+  box-shadow:
+      0 8px 25px rgba(239,68,68,0.35);
+}
+
+/* Result Card */
+.result-card {
+  padding: 25px;
+  border-radius: 22px;
+}
+
+.success-card {
+  background: #f0fdf4;
+}
+
+.error-card {
+  background: #fef2f2;
+}
+
+.success-text {
+  color: #16a34a;
+  font-weight: 800;
+}
+
+.error-text {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.time-text {
+  margin-top: 10px;
+  color: #334155;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  .employee-name {
+    font-size: 24px;
+  }
+
+  .attendance-btn {
+    font-size: 18px !important;
+  }
+
+  .instruction-title {
+    font-size: 18px;
+  }
+}
+
+.server-btn {
+  height: 42px !important;
+
+  border-radius: 14px !important;
+
+  color: white !important;
+
+  font-weight: 700 !important;
+
+  text-transform: none !important;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      ) !important;
+
+  box-shadow:
+      0 8px 18px rgba(79,70,229,0.25);
+}
+</style>

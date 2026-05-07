@@ -1,73 +1,4 @@
-<template>
-  <!--  <v-app>
-      &lt;!&ndash; Background container &ndash;&gt;
-      <div class="background">
-        <v-card class="form-card" elevation="10" width="360">
-          <v-card-title class="white&#45;&#45;text justify-center" style="font-weight: 700; font-size: 24px;">
-            Login
-          </v-card-title>
-          <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              &lt;!&ndash; Username &ndash;&gt;
-              <v-text-field
-                  v-model="username"
-                  label="Username"
-                  prepend-inner-icon="mdi-account"
-                  variant="outlined"
-                  rounded
-                  color="white"
-                  :rules="usernameRules"
-                  hide-details="auto"
-                  class="white-input"
-              ></v-text-field>
-
-              &lt;!&ndash; Password &ndash;&gt;
-              <v-text-field
-                  v-model="password"
-                  label="Password"
-                  prepend-inner-icon="mdi-lock"
-                  type="password"
-                  variant="outlined"
-                  rounded
-                  color="white"
-                  :rules="passwordRules"
-                  hide-details="auto"
-                  class="white-input"
-              ></v-text-field>
-
-              <div class="actions-row">
-                <v-checkbox
-                    v-model="remember"
-                    label="Remember me"
-                    class="white&#45;&#45;text"
-                    hide-details
-                    dense
-                    color="white"
-                ></v-checkbox>
-
-                <a href="#" class="forgot-link">Forgot password?</a>
-              </div>
-
-              <v-btn
-                  class="mt-4"
-                  color="white"
-                  rounded
-                  block
-                  :disabled="!valid"
-                  @click="submit"
-              >
-                Login
-              </v-btn>
-
-              <div class="register-text white&#45;&#45;text">
-                Don't have an account? <a href="#" class="register-link">Register</a>
-              </div>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </div>
-    </v-app>-->
-
+<!--<template>
   <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
@@ -76,13 +7,13 @@
             <img src="/logo.png" style="height: 130px; width: auto;" class="mb-4 mt-2"
                  alt="logo"/>
           </v-card-title>
-          <!-- Title -->
+          &lt;!&ndash; Title &ndash;&gt;
           <v-card-text class="text-h6 text-center">
             រដ្ឋាករទឹកបាត់ដំបង<br>
             AMS System
           </v-card-text>
 
-          <!-- Form -->
+          &lt;!&ndash; Form &ndash;&gt;
 
           <v-card-text>
             <v-form ref="form" v-model="valid">
@@ -108,7 +39,7 @@
             </v-form>
           </v-card-text>
 
-          <!-- Actions -->
+          &lt;!&ndash; Actions &ndash;&gt;
           <v-card-actions class="justify-end">
             <v-btn
                 color="primary"
@@ -123,15 +54,151 @@
             <br>
 
           </v-card-actions>
-          <!--          <div class="register-text" style="margin-bottom: 20px">
+          &lt;!&ndash;          <div class="register-text" style="margin-bottom: 20px">
                       គ្មានគណនី? <a @click="gotoRegister" class="register-link">បង្កើតគណនី</a>
-                    </div>-->
+                    </div>&ndash;&gt;
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-</template>
+</template>-->
+<template>
+  <v-container
+      fluid
+      class="login-page pa-4"
+  >
 
+    <!-- Background Decorations -->
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+
+    <v-row
+        align="center"
+        justify="center"
+        class="fill-height"
+    >
+
+      <v-col
+          cols="12"
+          sm="9"
+          md="5"
+          lg="4"
+      >
+
+        <v-card
+            :loading="loading"
+            class="login-card"
+            elevation="0"
+        >
+
+          <!-- Top Gradient -->
+          <div class="top-section">
+
+            <div class="logo-wrapper">
+
+              <img
+                  src="/logo.png"
+                  class="logo-image"
+                  alt="logo"
+              />
+
+            </div>
+
+          </div>
+
+          <!-- Content -->
+          <v-card-text class="pa-8">
+
+            <!-- Title -->
+            <div class="text-center mb-8">
+
+              <h1 class="system-title">
+                រដ្ឋាករទឹកបាត់ដំបង
+              </h1>
+
+              <p class="system-subtitle">
+                AMS Attendance Management System
+              </p>
+
+            </div>
+
+            <!-- Form -->
+            <v-form
+                ref="form"
+                v-model="valid"
+            >
+
+              <!-- Phone -->
+              <v-text-field
+                  v-model="user.phoneNumber"
+                  label="លេខទូរស័ព្ទ"
+                  prepend-inner-icon="mdi-phone-outline"
+                  :rules="phoneNumberRules"
+                  inputmode="numeric"
+                  variant="outlined"
+                  rounded="xl"
+                  class="modern-input"
+                  required
+              />
+
+              <!-- Password -->
+              <v-text-field
+                  v-model="user.password"
+                  label="លេខសំងាត់"
+                  prepend-inner-icon="mdi-lock-outline"
+                  :append-inner-icon="
+                  showPassword
+                    ? 'mdi-eye-off-outline'
+                    : 'mdi-eye-outline'
+                "
+                  :type="
+                  showPassword
+                    ? 'text'
+                    : 'password'
+                "
+                  @click:append-inner="
+                  showPassword = !showPassword
+                "
+                  :rules="passwordRules"
+                  variant="outlined"
+                  rounded="xl"
+                  class="modern-input"
+                  required
+              />
+
+              <!-- Login Button -->
+              <v-btn
+                  block
+                  size="x-large"
+                  class="login-btn mt-6"
+                  @click="login"
+              >
+
+                <v-icon start>
+                  mdi-login
+                </v-icon>
+
+                ចូលប្រើប្រាស់
+
+              </v-btn>
+
+            </v-form>
+
+            <!-- Bottom Text -->
+            <div class="bottom-text">
+              Secure Employee Attendance System
+            </div>
+
+          </v-card-text>
+
+        </v-card>
+
+      </v-col>
+
+    </v-row>
+
+  </v-container>
+</template>
 <script>
 import axios from 'axios'
 import {useAuthStore} from "@/store/auth.js"
@@ -221,7 +288,250 @@ export default {
 ;
 </script>
 
+<style scoped>
 
+/* ================= PAGE ================= */
+
+.login-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  background:
+      linear-gradient(
+          135deg,
+          #eef2ff 0%,
+          #f8fafc 50%,
+          #ffffff 100%
+      );
+}
+
+/* ================= BACKGROUND ================= */
+
+.bg-circle {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(10px);
+}
+
+.bg-circle-1 {
+  top: -120px;
+  right: -120px;
+
+  width: 320px;
+  height: 320px;
+
+  background:
+      rgba(79,70,229,0.15);
+}
+
+.bg-circle-2 {
+  bottom: -100px;
+  left: -100px;
+
+  width: 260px;
+  height: 260px;
+
+  background:
+      rgba(37,99,235,0.15);
+}
+
+/* ================= CARD ================= */
+
+.login-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 32px;
+
+  background:
+      rgba(255,255,255,0.92);
+
+  backdrop-filter:
+      blur(12px);
+
+  box-shadow:
+      0 12px 40px rgba(0,0,0,0.08);
+}
+
+/* ================= TOP ================= */
+
+.top-section {
+  height: 190px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      );
+
+  border-bottom-left-radius: 50% 18%;
+  border-bottom-right-radius: 50% 18%;
+}
+
+/* ================= LOGO ================= */
+
+.logo-wrapper {
+  width: 130px;
+  height: 130px;
+
+  border-radius: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+      rgba(255,255,255,0.15);
+
+  backdrop-filter:
+      blur(8px);
+
+  border:
+      2px solid rgba(255,255,255,0.2);
+
+  box-shadow:
+      0 10px 30px rgba(0,0,0,0.15);
+}
+
+.logo-image {
+  width: 95px;
+  height: auto;
+}
+
+/* ================= TITLE ================= */
+
+.system-title {
+  font-size: 30px;
+  font-weight: 800;
+
+  color: #0f172a;
+}
+
+.system-subtitle {
+  margin-top: 10px;
+
+  color: #64748b;
+
+  font-size: 15px;
+}
+
+/* ================= INPUT ================= */
+
+.modern-input {
+  margin-bottom: 18px;
+}
+
+:deep(.v-field) {
+  border-radius: 18px !important;
+
+  background:
+      #f8fafc !important;
+
+  transition: 0.3s;
+}
+
+:deep(.v-field:hover) {
+  background:
+      #f1f5f9 !important;
+}
+
+:deep(.v-field--focused) {
+  background:
+      white !important;
+
+  box-shadow:
+      0 0 0 4px rgba(59,130,246,0.10);
+}
+
+/* ================= BUTTON ================= */
+
+.login-btn {
+  height: 58px !important;
+
+  border-radius: 18px !important;
+
+  text-transform: none !important;
+
+  font-size: 18px !important;
+
+  font-weight: 700 !important;
+
+  color: white !important;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      ) !important;
+
+  box-shadow:
+      0 10px 25px rgba(79,70,229,0.30);
+
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ================= BOTTOM ================= */
+
+.bottom-text {
+  margin-top: 28px;
+
+  text-align: center;
+
+  color: #94a3b8;
+
+  font-size: 13px;
+
+  letter-spacing: 0.5px;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+
+  .system-title {
+    font-size: 24px;
+  }
+
+  .system-subtitle {
+    font-size: 14px;
+  }
+
+  .top-section {
+    height: 170px;
+  }
+
+  .logo-wrapper {
+    width: 110px;
+    height: 110px;
+  }
+
+  .logo-image {
+    width: 80px;
+  }
+
+  .login-btn {
+    font-size: 16px !important;
+  }
+}
+
+</style>
+<!--
 <style scoped>
 .fill-height {
   min-height: 100vh;
@@ -305,4 +615,4 @@ export default {
   text-decoration: underline;
 }
 
-</style>
+</style>-->

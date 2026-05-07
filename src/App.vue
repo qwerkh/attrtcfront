@@ -1,21 +1,21 @@
-<template>
+<!--<template>
   <v-app>
-    <!-- App Bar -->
+    &lt;!&ndash; App Bar &ndash;&gt;
     <v-app-bar app color="#005BAA" dark v-if="!!userDoc.token">
       <v-app-bar-nav-icon v-if="!!userDoc.token" @click="toggleDrawer"></v-app-bar-nav-icon>
       <v-toolbar-title v-if="!!userDoc.token">Scan Attendance</v-toolbar-title>
 
-      <!-- Spacer to push buttons to right -->
+      &lt;!&ndash; Spacer to push buttons to right &ndash;&gt;
       <v-spacer></v-spacer>
 
-      <!-- Login / Logout Button -->
+      &lt;!&ndash; Login / Logout Button &ndash;&gt;
       <v-btn v-if="!!userDoc.token" color="white" @click="connectToServer">ភ្ចាប់ជាមួយម៉ាស៊ីនមេ</v-btn>
       <v-btn v-if="!!userDoc.token" color="white" @click="logout">Logout</v-btn>
     </v-app-bar>
 
-    <!-- Navigation Drawer -->
+    &lt;!&ndash; Navigation Drawer &ndash;&gt;
     <v-navigation-drawer v-model="drawer" app temporary v-if="!!userDoc.token">
-      <!-- Profile Section -->
+      &lt;!&ndash; Profile Section &ndash;&gt;
       <v-sheet color="white lighten-4" class="pa-4" elevation="1">
         <v-list dense nav shaped>
           <v-list-item>
@@ -50,33 +50,20 @@
             v-show="subItem.hasRole()"
             :to="subItem.to"
         ></v-list-item>
-
-        <!--        <v-list-item
-                    v-for="subItem in items"
-                    :key="subItem.title"
-                    tag="a"
-                    :to="subItem.to"
-                >
-                  <v-list-item-icon v-text="subItem.action"></v-list-item-icon>
-
-                  <v-list-item-content link>
-                    <v-list-item-title v-text="subItem.title"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>-->
       </v-list>
     </v-navigation-drawer>
 
-    <!-- Main Content -->
+    &lt;!&ndash; Main Content &ndash;&gt;
     <v-main>
       <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-main>
 
-    <!-- Footer -->
+    &lt;!&ndash; Footer &ndash;&gt;
     <v-footer app padless v-if="!!userDoc.token">
-      <v-sheet color="#005BAA" width="100%" class="text-center white--text py-2">
-        © 2026 BBWSA AMS
+      <v-sheet color="#005BAA" width="100%" class="text-center white&#45;&#45;text py-2">
+        © 2026 BWU AMS
       </v-sheet>
     </v-footer>
 
@@ -102,6 +89,269 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+    </v-dialog>
+
+  </v-app>
+</template>-->
+
+<template>
+  <v-app class="modern-app">
+
+    <!-- ================= APP BAR ================= -->
+    <v-app-bar
+        app
+        flat
+        height="78"
+        class="modern-app-bar"
+        v-if="!!userDoc.token"
+    >
+
+      <!-- Menu Button -->
+      <v-btn
+          icon
+          variant="text"
+          @click="toggleDrawer"
+          class="menu-btn"
+      >
+        <v-icon size="28">mdi-menu</v-icon>
+      </v-btn>
+
+      <!-- Logo + Title -->
+      <div class="d-flex align-center">
+
+        <div class="logo-box">
+          <v-icon color="white" size="22">
+            mdi-qrcode-scan
+          </v-icon>
+        </div>
+
+        <div class="ml-3">
+          <h2 class="app-title">
+            Scan Attendance
+          </h2>
+
+          <p class="app-subtitle">
+            Attendance Management System
+          </p>
+        </div>
+      </div>
+
+      <v-spacer></v-spacer>
+
+      <!-- Server Button -->
+      <v-btn
+          class="server-btn mr-2"
+          @click="connectToServer"
+      >
+        <v-icon start size="18">
+          mdi-connection
+        </v-icon>
+
+        ភ្ជាប់ម៉ាស៊ីនមេ
+      </v-btn>
+
+      <!-- Logout -->
+      <v-btn
+          icon
+          variant="text"
+          @click="logout"
+          class="logout-btn"
+      >
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+
+    </v-app-bar>
+
+    <!-- ================= DRAWER ================= -->
+    <v-navigation-drawer
+        v-model="drawer"
+        app
+        temporary
+        width="300"
+        class="modern-drawer"
+        v-if="!!userDoc.token"
+    >
+
+      <!-- Drawer Header -->
+      <div class="drawer-header">
+
+        <div class="drawer-overlay"></div>
+
+        <div class="profile-section">
+
+          <v-avatar
+              size="90"
+              class="profile-avatar"
+          >
+
+            <!-- Male -->
+            <v-img
+                v-if="userDoc.url==='' && userDoc.gender==='1'"
+                src="/profile-male.png"
+            />
+
+            <!-- Female -->
+            <v-img
+                v-if="userDoc.url==='' && userDoc.gender==='2'"
+                src="/profile-female.png"
+            />
+
+            <!-- Custom -->
+            <v-img
+                v-if="
+                userDoc.url!=='' &&
+                userDoc.url!==null &&
+                userDoc.url!==undefined
+              "
+                :src="userDoc.url"
+            />
+
+          </v-avatar>
+
+          <h2 class="user-name">
+            {{ userDoc.name }}
+          </h2>
+
+          <p class="user-phone">
+            {{ userDoc.username }}
+          </p>
+
+        </div>
+      </div>
+
+      <!-- Menu -->
+      <div class="pa-4">
+
+        <div class="menu-label">
+          MENU
+        </div>
+
+        <v-list
+            nav
+            density="comfortable"
+            bg-color="transparent"
+        >
+
+          <v-list-item
+              v-for="subItem in items"
+              :key="subItem.title"
+              v-show="subItem.hasRole()"
+              :to="subItem.to"
+              rounded="xl"
+              class="menu-item mb-2"
+          >
+
+            <template v-slot:prepend>
+              <v-icon class="mr-3">
+                {{ subItem.action }}
+              </v-icon>
+            </template>
+
+            <v-list-item-title>
+              {{ subItem.title }}
+            </v-list-item-title>
+
+          </v-list-item>
+          <v-list-item
+              key="connectToServer"
+              @click="connectToServer"
+              rounded="xl"
+              class="menu-item mb-2"
+          >
+
+            <template v-slot:prepend>
+              <v-icon class="mr-3">
+                mdi-connection
+              </v-icon>
+            </template>
+
+            <v-list-item-title>
+              ភ្ជាប់ម៉ាស៊ីនមេ
+            </v-list-item-title>
+
+          </v-list-item>
+
+        </v-list>
+      </div>
+
+    </v-navigation-drawer>
+
+    <!-- ================= MAIN ================= -->
+    <v-main class="main-content">
+
+      <!-- Background -->
+      <div class="background-decoration"></div>
+
+      <v-container fluid class="pa-4">
+        <router-view></router-view>
+      </v-container>
+
+    </v-main>
+
+    <!-- ================= FOOTER ================= -->
+    <v-footer
+        app
+        border="0"
+        class="modern-footer"
+        v-if="!!userDoc.token"
+    >
+
+      <div class="footer-content">
+        © 2026 BWU AMS • All Rights Reserved
+      </div>
+
+    </v-footer>
+
+    <!-- ================= DIALOG ================= -->
+    <v-dialog
+        v-model="confirm.show"
+        max-width="420"
+    >
+
+      <v-card class="confirm-dialog">
+
+        <v-card-title class="dialog-title">
+
+          <div class="dialog-icon">
+            <v-icon color="white">
+              mdi-alert-circle-outline
+            </v-icon>
+          </div>
+
+          <div class="ml-4">
+            {{ confirm.title }}
+          </div>
+
+        </v-card-title>
+
+        <v-card-text class="dialog-text">
+          {{ confirm.message }}
+        </v-card-text>
+
+        <v-card-actions class="pa-4">
+
+          <v-spacer/>
+
+          <v-btn
+              variant="text"
+              rounded="xl"
+              @click="cancel"
+          >
+            Cancel
+          </v-btn>
+
+          <v-btn
+              rounded="xl"
+              class="ok-btn"
+              @click="ok"
+          >
+            OK
+          </v-btn>
+
+        </v-card-actions>
+
+      </v-card>
+
     </v-dialog>
 
   </v-app>
@@ -235,10 +485,344 @@ export default {
 };
 </script>
 
-<style>
+<!--<style>
 /* Optional global styles */
+
+.v-list-item&#45;&#45;nav .v-list-item-title {
+  line-height: 1.8rem !important;
+}
+</style>-->
+
+
+<style scoped>
 
 .v-list-item--nav .v-list-item-title {
   line-height: 1.8rem !important;
 }
+/* ================= APP ================= */
+
+.modern-app {
+  background:
+      linear-gradient(
+          135deg,
+          #eef2ff 0%,
+          #f8fafc 50%,
+          #ffffff 100%
+      );
+}
+
+/* ================= APP BAR ================= */
+
+.modern-app-bar {
+  background:
+      rgba(255,255,255,0.85) !important;
+
+  backdrop-filter:
+      blur(12px);
+
+  border-bottom:
+      1px solid rgba(255,255,255,0.2);
+
+  box-shadow:
+      0 4px 25px rgba(0,0,0,0.05) !important;
+}
+
+.menu-btn {
+  margin-right: 10px;
+}
+
+.logo-box {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      );
+
+  box-shadow:
+      0 8px 20px rgba(79,70,229,0.3);
+}
+
+.app-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.app-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.server-btn {
+  height: 42px !important;
+
+  border-radius: 14px !important;
+
+  color: white !important;
+
+  font-weight: 700 !important;
+
+  text-transform: none !important;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      ) !important;
+
+  box-shadow:
+      0 8px 18px rgba(79,70,229,0.25);
+}
+
+.logout-btn {
+  color: #ef4444 !important;
+}
+
+/* ================= DRAWER ================= */
+
+.modern-drawer {
+  border-right: none !important;
+}
+
+.drawer-header {
+  position: relative;
+
+  height: 260px;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      );
+
+  overflow: hidden;
+}
+
+.drawer-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+      radial-gradient(
+          rgba(255,255,255,0.15),
+          transparent
+      );
+}
+
+.profile-section {
+  position: relative;
+  z-index: 2;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar {
+  border:
+      4px solid rgba(255,255,255,0.4);
+
+  box-shadow:
+      0 10px 25px rgba(0,0,0,0.18);
+}
+
+.user-name {
+  margin-top: 18px;
+
+  color: white;
+
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.user-phone {
+  color: rgba(255,255,255,0.85);
+  margin-top: 5px;
+}
+
+.menu-label {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+
+  color: #94a3b8;
+
+  margin-bottom: 14px;
+}
+
+.menu-item {
+  min-height: 56px;
+
+  color: #334155;
+
+  transition: 0.3s;
+}
+
+.menu-item:hover {
+  background: #eef2ff;
+  transform: translateX(4px);
+}
+
+.menu-item.v-list-item--active {
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      );
+
+  color: white;
+}
+
+/* ================= MAIN ================= */
+
+.main-content {
+  position: relative;
+}
+
+.background-decoration {
+  position: fixed;
+
+  top: -150px;
+  right: -150px;
+
+  width: 350px;
+  height: 350px;
+
+  border-radius: 50%;
+
+  background:
+      radial-gradient(
+          rgba(99,102,241,0.15),
+          transparent 70%
+      );
+
+  z-index: 0;
+}
+
+/* ================= FOOTER ================= */
+
+.modern-footer {
+  background:
+      rgba(255,255,255,0.85) !important;
+
+  backdrop-filter:
+      blur(10px);
+
+  border-top:
+      1px solid rgba(255,255,255,0.2);
+
+  box-shadow:
+      0 -4px 20px rgba(0,0,0,0.03);
+}
+
+.footer-content {
+  width: 100%;
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-weight: 600;
+
+  padding: 12px 0;
+}
+
+/* ================= DIALOG ================= */
+
+.confirm-dialog {
+  border-radius: 26px !important;
+
+  overflow: hidden;
+}
+
+.dialog-title {
+  display: flex;
+  align-items: center;
+
+  padding: 24px;
+}
+
+.dialog-icon {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+      linear-gradient(
+          135deg,
+          #2563eb,
+          #4f46e5
+      );
+}
+
+.dialog-text {
+  color: #475569;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+.ok-btn {
+  color: white !important;
+
+  text-transform: none !important;
+
+  background:
+      linear-gradient(
+          135deg,
+          #16a34a,
+          #22c55e
+      ) !important;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+
+  .server-btn {
+    display: none;
+  }
+
+  .app-title {
+    font-size: 16px;
+  }
+
+  .app-subtitle {
+    display: none;
+  }
+
+  .drawer-header {
+    height: 230px;
+  }
+
+  .user-name {
+    font-size: 20px;
+  }
+}
+
 </style>
