@@ -112,9 +112,10 @@
                   size="x-large"
               >
                 <v-icon start size="24">
-                  {{ title === 'CheckIn'
-                    ? 'mdi-clock-check-outline'
-                    : 'mdi-clock-remove-outline'
+                  {{
+                    title === 'CheckIn'
+                        ? 'mdi-clock-check-outline'
+                        : 'mdi-clock-remove-outline'
                   }}
                 </v-icon>
 
@@ -242,9 +243,9 @@ export default {
     refreshPage() {
       this.isScan = false;
       this.loading = false;
-      this.scannedResult="";
-      this.message="";
-      this.code=200;
+      this.scannedResult = "";
+      this.message = "";
+      this.code = 200;
       window.location.reload();
     },
     async connectToServer() {
@@ -316,6 +317,12 @@ export default {
             if (checkIn.data && (checkIn.data.code > 250)) {
               vm.message = checkIn.data.message;
             }
+
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: 'smooth'
+            });
+
           },
           () => {
             vm.loading = false;
@@ -324,6 +331,10 @@ export default {
                Iphone: Setting -> Privacy and Security -> Location Services -> ស្វែងរក Safari Website -> Tick While Using the App <br>
                Android:
              `;*/
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: 'smooth'
+            });
           },
           {
             enableHighAccuracy: true,
@@ -358,13 +369,12 @@ export default {
 
 .attendance-page {
   min-height: 100vh;
-  background:
-      linear-gradient(
-          135deg,
-          #eef2ff 0%,
-          #f8fafc 50%,
-          #ffffff 100%
-      );
+  background: linear-gradient(
+      135deg,
+      #eef2ff 0%,
+      #f8fafc 50%,
+      #ffffff 100%
+  );
 }
 
 /* Main Card */
@@ -372,21 +382,19 @@ export default {
   position: relative;
   overflow: hidden;
   border-radius: 28px;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  box-shadow:
-      0 10px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
 /* Top Wave */
 .top-wave {
-  height: 170px;
-  background:
-      linear-gradient(
-          135deg,
-          #2563eb,
-          #4f46e5
-      );
+  height: 70px;
+  background: linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+  );
   border-bottom-left-radius: 50% 20%;
   border-bottom-right-radius: 50% 20%;
 }
@@ -395,8 +403,7 @@ export default {
 .profile-avatar {
   margin-top: -95px;
   border: 6px solid white;
-  box-shadow:
-      0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* User Info */
@@ -449,25 +456,21 @@ export default {
 }
 
 .checkin-btn {
-  background:
-      linear-gradient(
-          135deg,
-          #16a34a,
-          #22c55e
-      ) !important;
-  box-shadow:
-      0 8px 25px rgba(34,197,94,0.35);
+  background: linear-gradient(
+      135deg,
+      #16a34a,
+      #22c55e
+  ) !important;
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.35);
 }
 
 .checkout-btn {
-  background:
-      linear-gradient(
-          135deg,
-          #dc2626,
-          #ef4444
-      ) !important;
-  box-shadow:
-      0 8px 25px rgba(239,68,68,0.35);
+  background: linear-gradient(
+      135deg,
+      #dc2626,
+      #ef4444
+  ) !important;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35);
 }
 
 /* Result Card */
@@ -528,14 +531,12 @@ export default {
 
   text-transform: none !important;
 
-  background:
-      linear-gradient(
-          135deg,
-          #2563eb,
-          #4f46e5
-      ) !important;
+  background: linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+  ) !important;
 
-  box-shadow:
-      0 8px 18px rgba(79,70,229,0.25);
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
 }
 </style>
