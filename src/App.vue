@@ -397,6 +397,12 @@ export default {
           hasRole: () => useAuthStore().roles.indexOf("Employee") > -1
         },
         {
+          title: 'វត្តមានរបស់ខ្ញុំ',
+          action: "mdi-calendar-check",
+          to: "/activity",
+          hasRole: () => useAuthStore().roles.indexOf("Employee") > -1
+        },
+        {
           title: 'ប្តូរលេខសំងាត់',
           action: "mdi-lock-reset",
           to: "/changePassword",
