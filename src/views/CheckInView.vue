@@ -310,7 +310,9 @@ export default {
               }
             })
             if (checkIn.data.code === 201) {
-              vm.scannedResult = checkIn.data.data || "";
+              vm.scannedResult = checkIn.data.data && checkIn.data.data.id || "";
+              vm.currentDate = checkIn.data.data && checkIn.data.data.date || "";
+              vm.currentTime = checkIn.data.data && checkIn.data.data.time || "";
             }
             vm.code = checkIn.data.code;
             vm.loading = false;
