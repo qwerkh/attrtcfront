@@ -156,6 +156,53 @@
                 ម៉ោង : {{ currentTime }}
               </p>
             </div>
+            <!-- Info Message -->
+            <!--               -->
+
+            <div
+                v-if="infoCheck.empId"
+                class="attendance-row mt-8"
+            >
+              <!-- Check In -->
+              <!--              v-if="infoCheck.checkIn"-->
+
+              <div
+                  v-if="infoCheck.checkIn"
+                  class="attendance-item success"
+              >
+                <v-icon size="60" color="success">
+                  mdi-login
+                </v-icon>
+
+                <h3 class="title">
+                  បានចូលធ្វើការ
+                </h3>
+
+                <div class="time-box">
+                  {{ infoCheck.checkIn || "" }}
+                </div>
+              </div>
+
+              <!-- Check Out -->
+              <!--              -->
+
+              <div
+                  v-if="infoCheck.checkOut"
+                  class="attendance-item warning"
+              >
+                <v-icon size="60" color="warning">
+                  mdi-logout
+                </v-icon>
+
+                <h3 class="title">
+                  បានចេញពីធ្វើការ
+                </h3>
+
+                <div class="time-box">
+                  {{ infoCheck.checkOut || "" }}
+                </div>
+              </div>
+            </div>
 
             <!-- Error Result -->
             <div
@@ -227,7 +274,8 @@ export default {
       currentTime: moment().format("HH:mm:ss"),
       officeLatitude: "",
       officeLongitude: "",
-      title: "CheckIn"
+      title: "CheckIn",
+      infoCheck: {}
     }
   },
   computed: {
@@ -239,7 +287,33 @@ export default {
     let vm = this;
     vm.checkStatusUser();
   },
+  mounted() {
+    window.addEventListener('focus', this.checkStatusUser);
+  },
+
+  beforeUnmount() {
+    window.removeEventListener('focus', this.checkStatusUser);
+  },
   methods: {
+    async checkStatusUser() {
+      let vm = this;
+      let useAuth = useAuthStore();
+      const checkStatus = await axios({
+        method: "post",
+        url: process.env.VUE_APP_API_URL + "/employee/checkStatus",
+        headers: {
+          token: `${useAuth.token}`,
+        },
+        data: {
+          userId: vm.userDoc.userId,
+        }
+      })
+      if (checkStatus.data.code === 201) {
+        vm.title = checkStatus.data.data && checkStatus.data.data.checkType || "";
+        vm.infoCheck = checkStatus.data.data && checkStatus.data.data.todayAttDoc || {};
+      }
+
+    },
     refreshPage() {
       this.isScan = false;
       this.loading = false;
@@ -344,24 +418,7 @@ export default {
           }
       );
     },
-    async checkStatusUser() {
-      let vm = this;
-      let useAuth = useAuthStore();
-      const checkStatus = await axios({
-        method: "post",
-        url: process.env.VUE_APP_API_URL + "/employee/checkStatus",
-        headers: {
-          token: `${useAuth.token}`,
-        },
-        data: {
-          userId: vm.userDoc.userId,
-        }
-      })
-      if (checkStatus.data.code === 201) {
-        vm.title = checkStatus.data.data || "";
-      }
 
-    }
   }
 }
 </script>
@@ -540,5 +597,49 @@ export default {
   ) !important;
 
   box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+}
+
+.attendance-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap; /* responsive */
+}
+
+.attendance-item {
+  flex: 1;
+  min-width: 220px;
+  max-width: 300px;
+
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.success {
+  border-top: 5px solid #22c55e;
+}
+
+.warning {
+  border-top: 5px solid #f59e0b;
+}
+
+.title {
+  margin: 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.time-box {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
 }
 </style>
